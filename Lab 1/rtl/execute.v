@@ -73,9 +73,19 @@ reg [2:0] alu_ctl;
 
 
   assign zero = (alu_result == 32'h00000000) ? 1'b1 : 1'b0;
+
+  //possibly rename or add a secondary control flag for jumping?
   assign do_branch = (branch & zero);
   assign wreg_address = regdst == 1'b1 ? wreg_rd : wreg_rt;
-  assign branch_addr = pc4 + {sign_extend[29:0],2'b00};
+
+  always @(*) begin
+    if (aluop == 2'b01)
+      branch_addr = pc4 + {sign_extend[29:0],2'b00}
+    else 
+      // jump absolute address
+      branch_addr = {pc4[31:28], register_rs, register_rt, sign_extend[15:0], 2'b00}
+  end
+  assign ;
 
 
 endmodule
