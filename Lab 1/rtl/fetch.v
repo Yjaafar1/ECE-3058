@@ -29,17 +29,32 @@ wire [31:0] next_pc;
   // paste instructions from big-endian
   // assemblers lik gnu-as in big-endian
   // mode and most online mips assemblers
-  reg [0:31] iram [0:7];
+
+  reg [0:31] iram [0];
     initial begin 
-      iram[0] = 32'hac030000; // sw	$3, 0x0
-      iram[1] = 32'h8c040000; // lw	$4, 0x0
-      iram[2] = 32'h00832820; // add $5, $4, $3
-      iram[3] = 32'h00e52822; // sub $5, $7, $5
-      iram[4] = 32'h00a12824; // and $5, $5, $1
-      iram[5] = 32'h00a12825; // or $5, $5, $1
-      iram[6] = 32'h10a1fff9; // beq $5, $1, _start
-      iram[7] = 32'h00000000; // slt $5, $1, - FINISH
+      iram[0] = 32'h00832820; // add $5, $4, $3
+
+      // iram[0] = 32'hac030000; // sw	$3, 0x0
+      // iram[1] = 32'h8c040000; // lw	$4, 0x0
+      // iram[2] = 32'h00832820; // add $5, $4, $3
+      // iram[3] = 32'h00e52822; // sub $5, $7, $5
+      // iram[4] = 32'h00a12824; // and $5, $5, $1
+      // iram[5] = 32'h00a12825; // or $5, $5, $1
+      // iram[6] = 32'h10a1fff9; // beq $5, $1, _start
+      // iram[7] = 32'h00000000; // slt $5, $1, - FINISH
     end 
+  
+  // reg [0:31] iram [0:7];
+  //   initial begin 
+  //     iram[0] = 32'hac030000; // sw	$3, 0x0
+  //     iram[1] = 32'h8c040000; // lw	$4, 0x0
+  //     iram[2] = 32'h00832820; // add $5, $4, $3
+  //     iram[3] = 32'h00e52822; // sub $5, $7, $5
+  //     iram[4] = 32'h00a12824; // and $5, $5, $1
+  //     iram[5] = 32'h00a12825; // or $5, $5, $1
+  //     iram[6] = 32'h10a1fff9; // beq $5, $1, _start
+  //     iram[7] = 32'h00000000; // slt $5, $1, - FINISH
+  //   end 
 
 
   // access instruction pointed to by current pc

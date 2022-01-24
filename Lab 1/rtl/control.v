@@ -38,13 +38,24 @@ wire slti;
 
   // implement each output signal as the column of the truth
   // table which defines the control
-  assign regdst = rformat;
+  // execute control signals
   assign alusrc = lw | sw;
+  assign regdst = rformat;
+  assign aluop[1:0] = {rformat,beq};
+  assign branch = beq;
+
+  // memory control signals
+  assign memwrite = sw;
+  
+  //decode control signals
   assign memtoreg = lw;
   assign regwrite = rformat | lw;
-  assign memread = lw;
-  assign memwrite = sw;
-  assign branch = beq;
-  assign aluop[1:0] = {rformat,beq};
+  
+  // memread never used?
+  //assign memread = lw;
+
+  
+  
+  
 
 endmodule
