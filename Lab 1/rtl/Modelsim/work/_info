@@ -10,7 +10,7 @@ z2
 cModel Technology
 dC:/Users/jaafa/OneDrive - Georgia Institute of Technology/ECE 3058/Lab 1/rtl/Modelsim
 vcontrol
-Z0 !s110 1642998159
+Z0 !s110 1642999709
 !i10b 1
 !s100 :I^KYIVc@02Zbe9jjzige1
 Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -20,13 +20,13 @@ Z3 dC:/Users/jaafa/OneDrive/Documents/GitHub/Clones/ECE-3058/Lab 1/rtl/Modelsim
 w1642996356
 8../control.v
 F../control.v
-!i122 21
+!i122 53
 L0 8 54
 Z4 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z5 !s108 1642998159.000000
+Z5 !s108 1642999709.000000
 !s107 ../control.v|
 !s90 -reportprogress|300|-work|work|../control.v|
 !i113 1
@@ -43,7 +43,7 @@ R3
 Z8 w1611600367
 8../decode.v
 F../decode.v
-!i122 22
+!i122 54
 L0 10 54
 R4
 r1
@@ -63,10 +63,10 @@ R1
 IYIz;zn:L`=@Hjk99@LnZI0
 R2
 R3
-w1642996557
+w1642998163
 8../execute.v
 F../execute.v
-!i122 23
+!i122 55
 L0 8 74
 R4
 r1
@@ -81,16 +81,16 @@ R7
 vfetch
 R0
 !i10b 1
-!s100 I9TDFVnA1<PjTCMV=X^dl0
+!s100 _^Q5;jZ7O8VJYTd^Dh3Wi2
 R1
-IPnecbQ[`lmzgdhZ@afn>?1
+IP_ZDJ=^C0HMF=cMg]6PYc1
 R2
 R3
-w1642461954
+w1642999598
 8../fetch.v
 F../fetch.v
-!i122 24
-L0 10 52
+!i122 56
+L0 10 68
 R4
 r1
 !s85 0
@@ -112,7 +112,7 @@ R3
 R8
 8../memory.v
 F../memory.v
-!i122 25
+!i122 57
 L0 7 42
 R4
 r1
@@ -135,7 +135,7 @@ R3
 w1642448036
 8../mips.v
 F../mips.v
-!i122 26
+!i122 58
 L0 1 105
 R4
 r1
@@ -148,7 +148,7 @@ R5
 R6
 R7
 vmips_tb
-!s110 1642998160
+R0
 !i10b 1
 !s100 3C5l15E^_QKB`73DRmS=^0
 R1
@@ -158,7 +158,7 @@ R3
 R8
 8../mips_tb.v
 F../mips_tb.v
-!i122 27
+!i122 59
 L0 1 38
 R4
 r1
