@@ -24,9 +24,9 @@ input wire regdst,
 input wire jump, 
 input wire link, 
 // input wire controlling ori instruction
-input wire immediate_or
+input wire immediate_or,
 // input wire controlling lui instruction
-input wire immediate_load_upper
+input wire immediate_load_upper,
 
 output reg [31:0] alu_result,
 output wire [31:0] branch_addr,
@@ -44,16 +44,9 @@ reg [2:0] alu_ctl;
   assign ainput = register_rs;
 
   // set input b to zero_extend, sign_extend, or register_rt
-  always @(*) begin
-    if (immediate_or == 1'b1)
-      binput = {{16{0}}, sign_extend[16:0]};
-    else if (alusrc == 1'b1)
-      binput = sign_extend;
-    else 
-      binput = register_rt;
-)
-  end
-  assign binput = (alusrc == 1'b1) ?  sign_extend : register_rt;
+  assign binput = (immediate_or == 1'b1) ? {{16{1'b0}}, sign_extend[16:0]} :
+                  (alusrc == 1'b1)       ? sign_extend : 
+                                           register_rt;
 
   // compute alu_ctl from function_opcode
   // and alu_op 
@@ -71,7 +64,7 @@ reg [2:0] alu_ctl;
       alu_ctl = 3'b111; // slt
       
     // i type instructions
-    else if (immediate_or = 1'b1)
+    else if (immediate_or == 1'b1)
       alu_ctl = 3'b001;
 
     // for lw, sw, and beq
@@ -94,10 +87,10 @@ reg [2:0] alu_ctl;
       alu_result = ainput | binput;
     else if (alu_ctl == 3'b111)
       alu_result = (ainput < binput) ? 32'b1 : 32'b0;
-    else if (link = 1'b1)
+    else if (link == 1'b1)
       alu_result = pc4;
     else if (immediate_load_upper == 1'b0)
-      alu_result = {binput[15:0] ,{16{0}}}
+      alu_result = {binput[15:0] ,{16{1'b0}}};
   end
 
 
@@ -113,16 +106,11 @@ reg [2:0] alu_ctl;
   // 1. if JAL (in which case write to $31)
   // 2. if r format (wreg_rd)
   // 3. if not r format or JAL (wreg_rt)
-  always @(*) begin
-    if (jal = 1'b1)
-      wreg_address = 5'b11111
-    else if (regdst == 1'b1)
-      wreg_address = wreg_rd;
-    else 
-      wreg_address = wreg_rt;
-  end
+  assign wreg_address = (link == 1'b1)   ? 5'b11111 :
+                        (regdst == 1'b1) ? wreg_rd :
+                                           wreg_rt;
 
-  branch_addr = pc4 + {sign_extend[29:0],2'b00};
-  jump_addr = {pc4[31:28], j_address, 2'b00};
+  assign branch_addr = pc4 + {sign_extend[29:0],2'b00};
+  assign jump_addr = {pc4[31:28], j_address, 2'b00};
 
 endmodule
