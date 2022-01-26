@@ -49,7 +49,11 @@ control control(
 .alusrc(alusrc),
 .regwrite(regwrite),
 .branch(branch),
-.aluop(aluop)
+.aluop(aluop),
+.jump(jump),
+.link(link),
+.immediate_or(immediate_or),
+.immediate_load_upper(immediate_load_upper)
 );
 
 decode decode(
@@ -74,6 +78,7 @@ decode decode(
 execute execute(
 // inputs
 .pc4(pc4),
+.j_address(instruction[25:0]),
 .register_rs(register_rs),
 .register_rt(register_rt),
 .function_opcode(instruction[5:0]),
@@ -84,6 +89,10 @@ execute execute(
 .branch(branch),
 .alusrc(alusrc),
 .regdst(regdst),
+.jump(jump),
+.link(link),
+.immediate_or(immediate_or),
+.immediate_load_upper(immediate_load_upper),
 
 // outputs
 .alu_result(alu_result),

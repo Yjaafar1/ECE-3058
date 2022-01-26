@@ -7,6 +7,8 @@
 
 module execute(
 input wire [31:0] pc4,
+// added input wire to provide 26 bits needed for absolute jump
+input wire [25:0] j_address,
 input wire [31:0] register_rs,
 input wire [31:0] register_rt,
 input wire [5:0] function_opcode,
@@ -17,6 +19,14 @@ input wire [1:0] aluop,
 input wire branch,
 input wire alusrc,
 input wire regdst,
+// input wires to control whether to absolute jump and 
+// whether to register write-back to save PC + 4 in $31
+input wire jump, 
+input wire link, 
+// input wire controlling ori instruction
+input wire immediate_or
+// input wire controlling lui instruction
+input wire immediate_load_upper
 
 output reg [31:0] alu_result,
 output wire [31:0] branch_addr,
@@ -32,6 +42,17 @@ reg [2:0] alu_ctl;
 
   // compute the two alu inputs
   assign ainput = register_rs;
+
+  // set input b to zero_extend, sign_extend, or register_rt
+  always @(*) begin
+    if (immediate_or == 1'b1)
+      binput = {{16{0}}, sign_extend[16:0]};
+    else if (alusrc == 1'b1)
+      binput = sign_extend;
+    else 
+      binput = register_rt;
+)
+  end
   assign binput = (alusrc == 1'b1) ?  sign_extend : register_rt;
 
   // compute alu_ctl from function_opcode
@@ -49,11 +70,16 @@ reg [2:0] alu_ctl;
     else if ((aluop == 2'b10) & (function_opcode == 6'b101010))
       alu_ctl = 3'b111; // slt
       
+    // i type instructions
+    else if (immediate_or = 1'b1)
+      alu_ctl = 3'b001;
+
     // for lw, sw, and beq
-    else if (aluop == 2'b00)
+    else if (aluop == 2'b00 & immediate_load_upper == 1'b0)
       alu_ctl = 3'b010; // add
     else if (aluop == 2'b01)
       alu_ctl = 3'b110; // subtract
+
   end
 
   // use alu_ctl to set alu_result
@@ -68,24 +94,35 @@ reg [2:0] alu_ctl;
       alu_result = ainput | binput;
     else if (alu_ctl == 3'b111)
       alu_result = (ainput < binput) ? 32'b1 : 32'b0;
-
+    else if (link = 1'b1)
+      alu_result = pc4;
+    else if (immediate_load_upper == 1'b0)
+      alu_result = {binput[15:0] ,{16{0}}}
   end
 
 
   assign zero = (alu_result == 32'h00000000) ? 1'b1 : 1'b0;
 
-  //possibly rename or add a secondary control flag for jumping?
+  // branch if beq instruction called
   assign do_branch = (branch & zero);
-  assign wreg_address = regdst == 1'b1 ? wreg_rd : wreg_rt;
 
+  //jump if j or jal instruction called
+  assign do_jump = jump;
+
+  // set register write-back based on 
+  // 1. if JAL (in which case write to $31)
+  // 2. if r format (wreg_rd)
+  // 3. if not r format or JAL (wreg_rt)
   always @(*) begin
-    if (aluop == 2'b01)
-      branch_addr = pc4 + {sign_extend[29:0],2'b00}
+    if (jal = 1'b1)
+      wreg_address = 5'b11111
+    else if (regdst == 1'b1)
+      wreg_address = wreg_rd;
     else 
-      // jump absolute address
-      branch_addr = {pc4[31:28], register_rs, register_rt, sign_extend[15:0], 2'b00}
+      wreg_address = wreg_rt;
   end
-  assign ;
 
+  branch_addr = pc4 + {sign_extend[29:0],2'b00};
+  jump_addr = {pc4[31:28], j_address, 2'b00};
 
 endmodule

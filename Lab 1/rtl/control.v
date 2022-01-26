@@ -15,7 +15,12 @@ output wire memwrite,
 output wire alusrc,
 output wire regwrite,
 output wire branch,
-output wire [1:0] aluop
+output wire [1:0] aluop,
+// new outputs for bonus instructions
+output wire jump,
+output wire link,
+output wire immediate_or,
+output wire immediate_load_upper
 );
 
 //internals
@@ -26,10 +31,8 @@ wire beq;
 //immediate instructions
 wire lw;
 wire sw;
-wire andi;
+// additional 
 wire ori;
-wire addi;
-wire slti;
 wire lui;
 
 //jump instructions
@@ -45,10 +48,7 @@ wire jal;
   assign lw = opcode ==   6'b100011 ? 1'b1 : 1'b0;
   assign sw = opcode ==   6'b101011 ? 1'b1 : 1'b0;
   assign beq = opcode ==  6'b000100 ? 1'b1 : 1'b0;
-  assign andi = opcode == 6'b001100 ? 1'b1 : 1'b0;
   assign ori = opcode ==  6'b001101 ? 1'b1 : 1'b0;
-  assign addi = opcode == 6'b001000 ? 1'b1 : 1'b0;
-  assign slti = opcode == 6'b001010 ? 1'b1 : 1'b0;
   assign lui = opcode ==  6'b001111 ? 1'b1 : 1'b0;
 
   //j format
@@ -59,13 +59,12 @@ wire jal;
   // implement each output signal as the column of the truth
   // table which defines the control
   // execute control signals
-  assign alusrc = lw | sw | jal;
+  assign alusrc = lw | sw | ori | lui;
   assign regdst = rformat;
-  assign branch = beq | j | jal;
-
-  always @(*) begin
-    if ()
-  end
+  assign branch = beq;
+  // command signal to execute absolute jump
+  assign jump =  j | jal;
+  assign link = jal;
   assign aluop[1:0] = {rformat,beq};
 
   // memory control signals
@@ -73,7 +72,7 @@ wire jal;
   
   //decode control signals
   assign memtoreg = lw;
-  assign regwrite = rformat | lw | jal;
+  assign regwrite = rformat | lw | jal | ori | lui;
   
   // memread never used?
   //assign memread = lw;
