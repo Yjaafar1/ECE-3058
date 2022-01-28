@@ -52,8 +52,8 @@ wire jal;
   assign lui = opcode ==  6'b001111 ? 1'b1 : 1'b0;
 
   //j format
-  assign j = opcode == 6'b000010 ? 1'b1 : 1'b0;
-  assign jal = opcode == 6'b000011 ? 1'b1 : 1'b0;
+  assign j = opcode == 6'b000010 ?    1'b1 : 1'b0;
+  assign jal = opcode == 6'b000011 ?  1'b1 : 1'b0;
 
 
   // implement each output signal as the column of the truth
@@ -73,6 +73,9 @@ wire jal;
   //decode control signals
   assign memtoreg = lw;
   assign regwrite = rformat | lw | jal | ori | lui;
+
+  assign immediate_or = ori;
+  assign immediate_load_upper = lui;
   
   // memread never used?
   //assign memread = lw;

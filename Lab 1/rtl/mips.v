@@ -21,7 +21,7 @@ wire [4:0] wreg_rt;
 // execute
 wire [31:0] alu_result;
 wire [31:0] branch_addr;
-wire [31:0] jump_addr
+wire [31:0] jump_addr;
 wire [4:0] wreg_address;
 // memory
 wire [31:0] read_data;

@@ -34,8 +34,7 @@ wire [31:0] next_pc;
 
   reg [0:31] iram [0:1];
     initial begin 
-      //iram[0] = 32'h00832820; // add $5, $4, $3 32'h022182A; // slt $1, $2, $3
-      iram[0] = 32'h00832820; // slt $1, $3, $2
+      iram[0] = 32'h022182A; // slt $1, $2, $3
       iram[1] = 32'h00832820;  // no op
       // iram[0] = 32'hac030000; // sw	$3, 0x0
       // iram[1] = 32'h8c040000; // lw	$4, 0x0
