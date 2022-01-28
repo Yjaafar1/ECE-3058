@@ -21,6 +21,7 @@ wire [4:0] wreg_rt;
 // execute
 wire [31:0] alu_result;
 wire [31:0] branch_addr;
+wire [31:0] jump_addr
 wire [4:0] wreg_address;
 // memory
 wire [31:0] read_data;
@@ -30,7 +31,9 @@ fetch fetch(
 .clock(clock),
 .reset(reset),
 .branch_addr(branch_addr),
+.jump_addr(jump_addr),
 .do_branch(do_branch),
+.do_jump(do_jump),
 
 // outputs
 .instruction(instruction),
@@ -98,7 +101,8 @@ execute execute(
 .alu_result(alu_result),
 .branch_addr(branch_addr),
 .wreg_address(wreg_address),
-.do_branch(do_branch)
+.do_branch(do_branch),
+.do_jump(do_jump)
 );
 
 memory memory(

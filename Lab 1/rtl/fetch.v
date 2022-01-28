@@ -11,7 +11,9 @@ module fetch(
 input wire clock,
 input wire reset,
 input wire [31:0] branch_addr,
+input wire [31:0] jump_addr,
 input wire do_branch,
+input wire do_jump,
 
 output wire [31:0] instruction,
 output wire [31:0] pc4
@@ -30,11 +32,11 @@ wire [31:0] next_pc;
   // assemblers lik gnu-as in big-endian
   // mode and most online mips assemblers
 
-  reg [0:31] iram [0:2];
+  reg [0:31] iram [0:1];
     initial begin 
-      iram[0] = 32'h00832820; // add $5, $4, $3 32'h022182A; // slt $1, $2, $3
-      iram[1] = 32'h023102A; // slt $1, $3, $2
-      iram[2] = 32'h0000000;  // no op
+      //iram[0] = 32'h00832820; // add $5, $4, $3 32'h022182A; // slt $1, $2, $3
+      iram[0] = 32'h00832820; // slt $1, $3, $2
+      iram[1] = 32'h00832820;  // no op
       // iram[0] = 32'hac030000; // sw	$3, 0x0
       // iram[1] = 32'h8c040000; // lw	$4, 0x0
       // iram[2] = 32'h00832820; // add $5, $4, $3

@@ -7,7 +7,7 @@
 
 module execute(
 input wire [31:0] pc4,
-// added input wire to provide 26 bits needed for absolute jump
+// added input wire to provide 26 bits needed for absolute jump - RENAME
 input wire [25:0] j_address,
 input wire [31:0] register_rs,
 input wire [31:0] register_rt,
@@ -21,8 +21,8 @@ input wire alusrc,
 input wire regdst,
 // input wires to control whether to absolute jump and 
 // whether to register write-back to save PC + 4 in $31
-input wire jump, 
-input wire link, 
+input wire jump,
+input wire link,
 // input wire controlling ori instruction
 input wire immediate_or,
 // input wire controlling lui instruction
@@ -30,8 +30,11 @@ input wire immediate_load_upper,
 
 output reg [31:0] alu_result,
 output wire [31:0] branch_addr,
+//jump and branch could a shared bus, but it's best to be explicit
+output wire [31:0] jump_addr,
 output wire [4:0] wreg_address,
-output wire do_branch
+output wire do_branch,
+output wire do_jump
 );
 
 //internals
@@ -62,7 +65,6 @@ reg [2:0] alu_ctl;
       alu_ctl = 3'b001; // or
     else if ((aluop == 2'b10) & (function_opcode == 6'b101010))
       alu_ctl = 3'b111; // slt
-      
     // i type instructions
     else if (immediate_or == 1'b1)
       alu_ctl = 3'b001;
