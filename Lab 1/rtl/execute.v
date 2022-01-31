@@ -70,7 +70,7 @@ reg [2:0] alu_ctl;
       alu_ctl = 3'b001;
 
     // for lw, sw, and beq
-    else if (aluop == 2'b00 & immediate_load_upper == 1'b0)
+    else if (aluop == 2'b00)
       alu_ctl = 3'b010; // add
     else if (aluop == 2'b01)
       alu_ctl = 3'b110; // subtract
@@ -79,7 +79,11 @@ reg [2:0] alu_ctl;
 
   // use alu_ctl to set alu_result
   always @(*) begin
-    if (alu_ctl == 3'b010)
+    if (immediate_load_upper == 1'b1)
+      alu_result = {binput[15:0] ,{16'b0}};
+    else if (link == 1'b1)
+      alu_result = pc4;
+    else if (alu_ctl == 3'b010)
       alu_result = ainput + binput;
     else if (alu_ctl == 3'b110)
       alu_result = ainput - binput;
@@ -89,10 +93,6 @@ reg [2:0] alu_ctl;
       alu_result = ainput | binput;
     else if (alu_ctl == 3'b111)
       alu_result = (ainput < binput) ? 32'b1 : 32'b0;
-    else if (link == 1'b1)
-      alu_result = pc4;
-    else if (immediate_load_upper == 1'b0)
-      alu_result = {binput[15:0] ,{16{1'b0}}};
   end
 
 

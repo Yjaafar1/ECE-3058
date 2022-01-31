@@ -100,6 +100,7 @@ execute execute(
 // outputs
 .alu_result(alu_result),
 .branch_addr(branch_addr),
+.jump_addr(jump_addr),
 .wreg_address(wreg_address),
 .do_branch(do_branch),
 .do_jump(do_jump)
