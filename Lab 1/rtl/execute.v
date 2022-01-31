@@ -79,6 +79,7 @@ reg [2:0] alu_ctl;
 
   // use alu_ctl to set alu_result
   always @(*) begin
+    //  prioritize special control signals (lui/jal) for setting ALU output for register write-back
     if (immediate_load_upper == 1'b1)
       alu_result = {binput[15:0] ,{16'b0}};
     else if (link == 1'b1)
@@ -113,6 +114,8 @@ reg [2:0] alu_ctl;
                                            wreg_rt;
 
   assign branch_addr = pc4 + {sign_extend[29:0],2'b00};
+
+  //construct jump_addr with first 4 bits of PC, j_address (last 26 bits of instruction), and 2 padded 0s for byte address
   assign jump_addr = {pc4[31:28], j_address, 2'b00};
 
 endmodule
