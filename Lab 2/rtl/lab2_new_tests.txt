@@ -1,0 +1,42 @@
+Sample Tests for Pipeline. Note these are to help you debug and are not meant to guarantee correctness.
+
+**** General Test ****
+        instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[3] = 32'h01004024;     //   and $8,  $8, $0 // register 8 should be 0x0
+        instr_RAM[4] = 32'h01054025;     //   or $8 $8 $5     // reg 8 should be 0x5
+        instr_RAM[5] = 32'h00444824;     //   and $9 $2 $4   // reg 9 should be 0x0
+        instr_RAM[6] = 32'h8C090000;     //   lw  $9,  0x0($0)//  register 9 should have the value of 0x55555555
+        instr_RAM[7] = 32'h01284820;     //   add $9   $9  $8 // register 9 should have the value of  0x5555555A
+        instr_RAM[8] = 32'h01284822;     //   sub $9,  $9, $8 // register 9 should have the value of 0x55555555
+        instr_RAM[9] = 32'h0128582A;     //   slt $11, $9, $8 // register 11 should have the value of 0x0
+        instr_RAM[10] = 32'h0109582A;     //   slt $11 $8 $9   // register 11 should have the value of 0x1
+        instr_RAM[11] = 32'h002B1022;     //   sub $2 $1 $11    // register 2 should have the value of 0x0
+
+**** Stall After Load Test ****
+        instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[3] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        instr_RAM[4] = 32'h01220820;     //   add $1 $9 $2 // reg 1  0x55555557
+        instr_RAM[5] = 32'h8C080004;     //   LW $8 0x4($0) // reg 8 0xAAAAAAAA
+        instr_RAM[6] = 32'h01061820;     //   add $3 $8 $6 // reg 3 0xAAAAAAB0
+        instr_RAM[7] = 32'hac090004;     //   SW $9 0x4($0) // store 0x55555555 to memory
+
+
+**** Forwarding Test ****
+        instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[3] = 32'h00430820;     //   add $1 $2 $3    // reg 1 5
+        instr_RAM[4] = 32'h00410820;     //   add $1 $2 $1    // reg 1 7
+        instr_RAM[5] = 32'h00220820;     //   add $1 $1 $2    // reg 1 9
+        instr_RAM[6] = 32'h01210825;     //   or $1 $9 $1     // reg 1 9
+        instr_RAM[7] = 32'h01211025;     //   or $2 $9 $1     // reg 2 9
+        instr_RAM[8] = 32'h00000000;     //   NOP gap to help test 2 ahead
+        instr_RAM[9] = 32'h01221025;     //   or $2 $9 $2     // reg 2 9
+        instr_RAM[10] = 32'h01260822;    //   sub $1 $9 $6    // reg 1 3
+        instr_RAM[11] = 32'h00C90820;    //   add $1 $6 $9    // reg 1 F
+        instr_RAM[12] = 32'h01E11022;    //    sub $2 $15 $1  // reg 2 0
+        instr_RAM[13] = 32'h00000000;    //   nop
