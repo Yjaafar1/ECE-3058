@@ -77,7 +77,7 @@ decode decode(
 .sign_extend(sign_extend),
 .wreg_rd(wreg_rd),
 .wreg_rt(wreg_rt),
-.wreg_rs(wreg_rs)
+.wreg_rs(wreg_rs)   
 );
 
 execute execute(

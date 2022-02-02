@@ -116,6 +116,6 @@ reg [2:0] alu_ctl;
   assign branch_addr = pc4 + {sign_extend[29:0],2'b00};
 
   //construct jump_addr with first 4 bits of PC, the last 26 instruction bits, and 2 padded 0s for byte address
-  assign jump_addr = {pc4[31:28], wreg_rs, wreg_rt, wreg_rd, sign_extend[15:0], 2'b00};
+  assign jump_addr = {pc4[31:28], wreg_rs, wreg_rt, sign_extend[15:0], 2'b00};
 
 endmodule
