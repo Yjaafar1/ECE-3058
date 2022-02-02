@@ -7,14 +7,14 @@
 
 module execute(
 input wire [31:0] pc4,
-// added input wire to provide 26 bits needed for absolute jump - RENAME
-input wire [25:0] j_address,
 input wire [31:0] register_rs,
 input wire [31:0] register_rt,
 input wire [5:0] function_opcode,
 input wire [31:0] sign_extend,
 input wire [4:0] wreg_rd,
 input wire [4:0] wreg_rt,
+//adds input for rs address; used to construct jump address
+input wire [4:0] wreg_rs,
 input wire [1:0] aluop,
 input wire branch,
 input wire alusrc,
@@ -47,7 +47,7 @@ reg [2:0] alu_ctl;
   assign ainput = register_rs;
 
   // set input b to zero_extend, sign_extend, or register_rt
-  assign binput = (immediate_or == 1'b1) ? {{16{1'b0}}, sign_extend[16:0]} :
+  assign binput = (immediate_or == 1'b1) ? {{16{1'b0}}, sign_extend[15:0]} :
                   (alusrc == 1'b1)       ? sign_extend : 
                                            register_rt;
 
@@ -115,7 +115,7 @@ reg [2:0] alu_ctl;
 
   assign branch_addr = pc4 + {sign_extend[29:0],2'b00};
 
-  //construct jump_addr with first 4 bits of PC, j_address (last 26 bits of instruction), and 2 padded 0s for byte address
-  assign jump_addr = {pc4[31:28], j_address, 2'b00};
+  //construct jump_addr with first 4 bits of PC, the last 26 instruction bits, and 2 padded 0s for byte address
+  assign jump_addr = {pc4[31:28], wreg_rs, wreg_rt, wreg_rd, sign_extend[15:0], 2'b00};
 
 endmodule

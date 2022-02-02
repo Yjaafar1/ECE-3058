@@ -18,6 +18,7 @@ wire [31:0] register_rt;
 wire [31:0] sign_extend;
 wire [4:0] wreg_rd;
 wire [4:0] wreg_rt;
+wire [4:0] wreg_rs;
 // execute
 wire [31:0] alu_result;
 wire [31:0] branch_addr;
@@ -75,19 +76,20 @@ decode decode(
 .register_rt(register_rt),
 .sign_extend(sign_extend),
 .wreg_rd(wreg_rd),
-.wreg_rt(wreg_rt)
+.wreg_rt(wreg_rt),
+.wreg_rs(wreg_rs)
 );
 
 execute execute(
 // inputs
 .pc4(pc4),
-.j_address(instruction[25:0]),
 .register_rs(register_rs),
 .register_rt(register_rt),
 .function_opcode(instruction[5:0]),
 .sign_extend(sign_extend),
 .wreg_rd(wreg_rd),
 .wreg_rt(wreg_rt),
+.wreg_rs(wreg_rs),
 .aluop(aluop),
 .branch(branch),
 .alusrc(alusrc),
