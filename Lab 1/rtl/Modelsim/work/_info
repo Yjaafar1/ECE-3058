@@ -10,23 +10,23 @@ z2
 cModel Technology
 dC:/Users/jaafa/OneDrive - Georgia Institute of Technology/ECE 3058/Lab 1/rtl/Modelsim
 vcontrol
-Z0 !s110 1643842429
+Z0 !s110 1644196129
 !i10b 1
 !s100 GEoM2z6BT`k;zEgXP4VN;0
 Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
 Ik`UoaWXojolV:Y@><ZWM53
 Z2 VDg1SIo80bB@j0V0VzS_@n1
 Z3 dC:/Users/jaafa/Documents/GitHub/ECE-3058/Lab 1/rtl/Modelsim
-Z4 w1643841697
+w1643841697
 8../control.v
 F../control.v
-!i122 332
+!i122 353
 L0 8 80
-Z5 OV;L;2020.1;71
+Z4 OV;L;2020.1;71
 r1
 !s85 0
 31
-!s108 1643842428.000000
+Z5 !s108 1644196129.000000
 !s107 ../control.v|
 !s90 -reportprogress|300|-work|work|../control.v|
 !i113 1
@@ -43,13 +43,13 @@ R3
 w1643842428
 8../decode.v
 F../decode.v
-!i122 333
+!i122 354
 L0 10 56
-R5
+R4
 r1
 !s85 0
 31
-Z8 !s108 1643842429.000000
+R5
 !s107 ../decode.v|
 !s90 -reportprogress|300|-work|work|../decode.v|
 !i113 1
@@ -58,51 +58,51 @@ R7
 vexecute
 R0
 !i10b 1
-!s100 `7jcFF5_FWe`[F;7fh[Ld2
+!s100 S<5Q1jTDU:Qc89h@4;g@40
 R1
-IgOjP<b_2bM^<oZe=T=RnW3
+I^Im?c6RTE9nWD7CR7;5nE1
 R2
 R3
-w1643842350
+w1643842870
 8../execute.v
 F../execute.v
-!i122 334
+!i122 355
 L0 8 114
-R5
+R4
 r1
 !s85 0
 31
-R8
+R5
 !s107 ../execute.v|
 !s90 -reportprogress|300|-work|work|../execute.v|
 !i113 1
 R6
 R7
 vfetch
-R0
+Z8 !s110 1644196130
 !i10b 1
-!s100 6``cm`[Fi6e9:G5MR:fV33
+!s100 X75Waj:93=kZO:D:G1Z191
 R1
-I@n@W[cLinK<1OC_IIW_YX0
+I35NfbPM;0DomYS43QKjDf2
 R2
 R3
-R4
+w1644196112
 8../fetch.v
 F../fetch.v
-!i122 335
-L0 10 87
-R5
+!i122 356
+L0 10 69
+R4
 r1
 !s85 0
 31
-R8
+R5
 !s107 ../fetch.v|
 !s90 -reportprogress|300|-work|work|../fetch.v|
 !i113 1
 R6
 R7
 vmemory
-R0
+R8
 !i10b 1
 !s100 XYgiQ5_mKhDF0]eCJ7o[c2
 R1
@@ -112,43 +112,43 @@ R3
 Z9 w1643346573
 8../memory.v
 F../memory.v
-!i122 336
+!i122 357
 L0 7 42
-R5
+R4
 r1
 !s85 0
 31
-R8
+Z10 !s108 1644196130.000000
 !s107 ../memory.v|
 !s90 -reportprogress|300|-work|work|../memory.v|
 !i113 1
 R6
 R7
 vmips
-R0
+R8
 !i10b 1
 !s100 D0HODdh=3O]Fg^leOzS<^1
 R1
 Io5c0c:OKc@10hA:N:k[Og3
 R2
 R3
-w1643842246
+w1643842812
 8../mips.v
 F../mips.v
-!i122 337
+!i122 358
 L0 1 121
-R5
+R4
 r1
 !s85 0
 31
-R8
+R10
 !s107 ../mips.v|
 !s90 -reportprogress|300|-work|work|../mips.v|
 !i113 1
 R6
 R7
 vmips_tb
-!s110 1643842430
+R8
 !i10b 1
 !s100 3C5l15E^_QKB`73DRmS=^0
 R1
@@ -158,13 +158,13 @@ R3
 R9
 8../mips_tb.v
 F../mips_tb.v
-!i122 338
+!i122 359
 L0 1 38
-R5
+R4
 r1
 !s85 0
 31
-R8
+R10
 !s107 ../mips_tb.v|
 !s90 -reportprogress|300|-work|work|../mips_tb.v|
 !i113 1
