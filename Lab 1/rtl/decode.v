@@ -21,7 +21,8 @@ output wire [31:0] register_rs,
 output wire [31:0] register_rt,
 output wire [31:0] sign_extend,
 output wire [4:0] wreg_rd,
-output wire [4:0] wreg_rt
+output wire [4:0] wreg_rt,
+output wire [4:0] wreg_rs
 );
 
 //internals
@@ -59,5 +60,6 @@ reg [31:0] register_array [0:31];
   // move possible write destinations to execute stage                   
   assign wreg_rd = instruction[15:11];
   assign wreg_rt = instruction[20:16];
+  assign wreg_rs = instruction[25:21];
 
 endmodule

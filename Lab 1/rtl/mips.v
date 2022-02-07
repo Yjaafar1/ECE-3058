@@ -18,9 +18,11 @@ wire [31:0] register_rt;
 wire [31:0] sign_extend;
 wire [4:0] wreg_rd;
 wire [4:0] wreg_rt;
+wire [4:0] wreg_rs;
 // execute
 wire [31:0] alu_result;
 wire [31:0] branch_addr;
+wire [31:0] jump_addr;
 wire [4:0] wreg_address;
 // memory
 wire [31:0] read_data;
@@ -30,7 +32,9 @@ fetch fetch(
 .clock(clock),
 .reset(reset),
 .branch_addr(branch_addr),
+.jump_addr(jump_addr),
 .do_branch(do_branch),
+.do_jump(do_jump),
 
 // outputs
 .instruction(instruction),
@@ -49,7 +53,11 @@ control control(
 .alusrc(alusrc),
 .regwrite(regwrite),
 .branch(branch),
-.aluop(aluop)
+.aluop(aluop),
+.jump(jump),
+.link(link),
+.immediate_or(immediate_or),
+.immediate_load_upper(immediate_load_upper)
 );
 
 decode decode(
@@ -68,7 +76,8 @@ decode decode(
 .register_rt(register_rt),
 .sign_extend(sign_extend),
 .wreg_rd(wreg_rd),
-.wreg_rt(wreg_rt)
+.wreg_rt(wreg_rt),
+.wreg_rs(wreg_rs)   
 );
 
 execute execute(
@@ -80,16 +89,23 @@ execute execute(
 .sign_extend(sign_extend),
 .wreg_rd(wreg_rd),
 .wreg_rt(wreg_rt),
+.wreg_rs(wreg_rs),
 .aluop(aluop),
 .branch(branch),
 .alusrc(alusrc),
 .regdst(regdst),
+.jump(jump),
+.link(link),
+.immediate_or(immediate_or),
+.immediate_load_upper(immediate_load_upper),
 
 // outputs
 .alu_result(alu_result),
 .branch_addr(branch_addr),
+.jump_addr(jump_addr),
 .wreg_address(wreg_address),
-.do_branch(do_branch)
+.do_branch(do_branch),
+.do_jump(do_jump)
 );
 
 memory memory(
