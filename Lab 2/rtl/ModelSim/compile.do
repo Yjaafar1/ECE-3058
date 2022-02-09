@@ -1,0 +1,10 @@
+vlog -reportprogress 300 -work work {../control.sv}
+vlog -reportprogress 300 -work work {../dmemory.sv}
+vlog -reportprogress 300 -work work {../execute.sv}
+vlog -reportprogress 300 -work work {../fwd_cont.sv}
+vlog -reportprogress 300 -work work {../idecode.sv}
+vlog -reportprogress 300 -work work {../ifetch.sv}
+vlog -reportprogress 300 -work work {../mips.sv}
+vlog -reportprogress 300 -work work {../stall_cont.sv}
+vlog -reportprogress 300 -work work {../write_back.sv}
+vlog -reportprogress 300 -work work {../mips_tb.sv}
