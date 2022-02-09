@@ -36,8 +36,32 @@ output logic  [1:0] op_FA, //select lines for forwarding muxes (Rs)
 output logic  [1:0] op_FB  //select lines for forwarding muxes (Rt)
 );
 
+logic dest_match_EX_MEM_A;
+assign dest_match_EX_MEM_A = ip_EX_MEM_dest == ip_DEC_DEST_RS;
+logic dest_match_MEM_WB_A;
+assign dest_match_MEM_WB_A = ip_MEM_WB_dest == ip_DEC_DEST_RS;
 
-assign op_FA = 2'b00;
-assign op_FB = 2'b00;
+always @(*) begin
+    if (ip_EX_MEM_RegWrite && ip_DEC_DEST_RS && dest_match_EX_MEM_A)
+        op_FA = 2'b01;
+    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RS && dest_match_MEM_WB_A)
+        op_FA = 2'b10;
+    else 
+        op_FA = 2'b00;
+end
+
+logic dest_match_EX_MEM_B;
+assign dest_match_EX_MEM_B = ip_EX_MEM_dest == ip_DEC_DEST_RT;
+logic dest_match_MEM_WB_B;
+assign dest_match_MEM_WB_B = ip_MEM_WB_dest == ip_DEC_DEST_RT;
+
+always @(*) begin
+    if (ip_EX_MEM_RegWrite && ip_DEC_DEST_RT && dest_match_EX_MEM_A) 
+        op_FB = 2'b01;
+    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RT && dest_match_MEM_WB_A) 
+        op_FB = 2'b10;
+    else 
+        op_FB = 2'b00;
+end
 
 endmodule
