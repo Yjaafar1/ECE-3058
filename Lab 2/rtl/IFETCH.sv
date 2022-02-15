@@ -71,17 +71,24 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         for (int i = 0; i < PARAM_RAM_length; i++) 
             instr_RAM[i] = 0; //initialize the RAM with all zeros
         
-        //Put the program here
-        instr_RAM[0] = 32'h00000000;   // nop fill pipeline
-        instr_RAM[1] = 32'h00000000;   // nop fill pipeline
-        instr_RAM[2] = 32'h00000000;   // nop fill pipeline
-        instr_RAM[3] = 32'h8C020000;   // lw $2,0 ;memory(00)=55555555
-        instr_RAM[4] = 32'h8C030004;   // lw $3,4 ;memory(04)=AAAAAAAA
-        instr_RAM[5] = 32'h00430820;   // add $1,$2,$3
-        instr_RAM[6] = 32'hAC010008;   // sw $1,4 ;memory(08)=FFFFFFFF
-        instr_RAM[7] = 32'h1022FFFF;   // beq $1,$2,-4  
-        instr_RAM[8] = 32'h1021FFFA;   // beq $1,$1,-24 (Assume delay slot present, so it  
-                                       // New PC = PC+4-24 = PC-20
+        instr_RAM[0] = 32'b00100100001000010000000000000010; //addi $1, $1, 2
+        instr_RAM[1] = 32'b00100100010000100000000000000010; //addi $2, $2, 2
+        instr_RAM[2] = 32'b00000000001000100001100000100000; //addi $3, $1, $2
+        instr_RAM[3] = 32'h00000000;                         // nop fill pipeline
+        instr_RAM[4] = 32'h00000000;
+        instr_RAM[5] = 32'h00000000;
+        instr_RAM[6] = 32'h00000000;
+        // //Put the program here
+        // instr_RAM[0] = 32'h00000000;   // nop fill pipeline
+        // instr_RAM[1] = 32'h00000000;   // nop fill pipeline
+        // instr_RAM[2] = 32'h00000000;   // nop fill pipeline
+        // instr_RAM[3] = 32'h8C020000;   // lw $2,0 ;memory(00)=55555555
+        // instr_RAM[4] = 32'h8C030004;   // lw $3,4 ;memory(04)=AAAAAAAA
+        // instr_RAM[5] = 32'h00430820;   // add $1,$2,$3
+        // instr_RAM[6] = 32'hAC010008;   // sw $1,4 ;memory(08)=FFFFFFFF
+        // instr_RAM[7] = 32'h1022FFFF;   // beq $1,$2,-4  
+        // instr_RAM[8] = 32'h1021FFFA;   // beq $1,$1,-24 (Assume delay slot present, so it  
+        //                                // New PC = PC+4-24 = PC-20
 
     end 
     
