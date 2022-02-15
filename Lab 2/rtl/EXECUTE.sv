@@ -117,9 +117,25 @@ module EXECUTE (
     
     //form the input dat0
 	////Add forwarding
-	
-    assign A_input = ip_read_data_1;
-    assign B_input = ip_ALU_src ? ip_immediate : ip_read_data_2;
+	always @(*) begin
+        if (FA == 2'b10)
+            A_input = ALU_result_MEM;
+        else if (FA == 2'b01)
+            A_input = read_data_wb;
+        else 
+            A_input = ip_read_data_1;
+    end
+
+    always @(*) begin
+        if (FB == 2'b10)
+            B_input = ALU_result_MEM;
+        else if (FB == 2'b01)
+            B_input = read_data_wb;
+        else if (ip_ALU_src)
+            B_input = ip_immediate;
+        else 
+            B_input = ip_read_data_2;
+    end
 
     
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -43,9 +43,9 @@ assign dest_match_MEM_WB_A = ip_MEM_WB_dest == ip_DEC_DEST_RS;
 
 always @(*) begin
     if (ip_EX_MEM_RegWrite && ip_DEC_DEST_RS && dest_match_EX_MEM_A)
-        op_FA = 2'b01;
-    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RS && dest_match_MEM_WB_A)
         op_FA = 2'b10;
+    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RS && dest_match_MEM_WB_A)
+        op_FA = 2'b01;
     else 
         op_FA = 2'b00;
 end
@@ -57,9 +57,9 @@ assign dest_match_MEM_WB_B = ip_MEM_WB_dest == ip_DEC_DEST_RT;
 
 always @(*) begin
     if (ip_EX_MEM_RegWrite && ip_DEC_DEST_RT && dest_match_EX_MEM_A) 
-        op_FB = 2'b01;
-    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RT && dest_match_MEM_WB_A) 
         op_FB = 2'b10;
+    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RT && dest_match_MEM_WB_A) 
+        op_FB = 2'b01;
     else 
         op_FB = 2'b00;
 end
