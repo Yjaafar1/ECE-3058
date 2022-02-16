@@ -111,7 +111,7 @@ module IDECODE(
     always @(posedge clock) begin
         if (reset)
             for (int i = 0; i < 32; i++) //use a loop to init the array
-                register_array[i] <= 0; //initialize the RAM with all zeros
+                register_array[i] <= i; //initialize the RAM with all zeros
 
         // Write back to register - don't write to register 0
         else if(ip_RegWrite && (ip_write_reg_addr != 0))

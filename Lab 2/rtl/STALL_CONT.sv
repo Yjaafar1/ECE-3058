@@ -85,7 +85,7 @@ module STALL_CONT(
     logic RS_EX_hazard  ;
     //logic RS_MEM_hazard ;
     //logic RS_WB_hazard  ;
-    assign RS_EX_hazard  = ((sig_RS == ip_dest_EX) && use_RS == 1 && ip_RegWrite_EX == 1) && ip_Lw;
+    assign RS_EX_hazard  = ((sig_RS == ip_dest_EX) && use_RS == 1 && ip_RegWrite_EX == 1); //&& ip_Lw;
     //assign RS_MEM_hazard = ((sig_RS == ip_dest_MEM) && use_RS == 1 && ip_RegWrite_MEM == 1);
     //assign RS_WB_hazard  = ((sig_RS == ip_dest_WB) && use_RS == 1 && ip_RegWrite_WB == 1);
     
@@ -102,7 +102,7 @@ module STALL_CONT(
     logic RT_EX_hazard  ;
     //logic RT_MEM_hazard ;
     //logic RT_WB_hazard  ;
-    assign RT_EX_hazard  = ((sig_RT == ip_dest_EX) && use_RT == 1 && ip_RegWrite_EX == 1) && ip_Lw;
+    assign RT_EX_hazard  = ((sig_RT == ip_dest_EX) && use_RT == 1 && ip_RegWrite_EX == 1); //&& ip_Lw;
     //assign RT_MEM_hazard = ((sig_RT == ip_dest_MEM) && use_RT == 1 && ip_RegWrite_MEM == 1);
     //assign RT_WB_hazard  = ((sig_RT == ip_dest_WB) && use_RT == 1 && ip_RegWrite_WB == 1);
     

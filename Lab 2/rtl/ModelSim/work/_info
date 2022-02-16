@@ -11,7 +11,7 @@ cModel Technology
 dC:/Users/jaafa/Documents/GitHub/ECE-3058/Lab 2/rtl/ModelSim
 vCONTROL
 Z0 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
-Z1 !s110 1644996905
+Z1 !s110 1645031356
 !i10b 1
 !s100 K0co<^OaAUJ4?GE2kF0X30
 Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -22,13 +22,13 @@ Z4 dC:/Users/jaafa/OneDrive/Documents/GitHub/Clones/ECE-3058/Lab 2/rtl/ModelSim
 Z5 w1644209485
 8../control.sv
 F../control.sv
-!i122 227
+!i122 257
 L0 44 136
 Z6 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z7 !s108 1644996905.000000
+Z7 !s108 1645031356.000000
 !s107 ../control.sv|
 !s90 -reportprogress|300|-work|work|../control.sv|
 !i113 1
@@ -48,7 +48,7 @@ R4
 R5
 8../dmemory.sv
 F../dmemory.sv
-!i122 228
+!i122 258
 L0 44 121
 R6
 r1
@@ -74,7 +74,7 @@ R4
 w1644958455
 8../execute.sv
 F../execute.sv
-!i122 229
+!i122 259
 L0 59 208
 R6
 r1
@@ -100,7 +100,7 @@ R4
 w1644958053
 8../fwd_cont.sv
 F../fwd_cont.sv
-!i122 230
+!i122 260
 L0 28 40
 R6
 r1
@@ -126,7 +126,7 @@ R4
 w1644994154
 8../idecode.sv
 F../idecode.sv
-!i122 231
+!i122 261
 L0 40 143
 R6
 r1
@@ -141,18 +141,18 @@ R9
 n@i@d@e@c@o@d@e
 vIFECTCH
 R0
-R1
+Z10 !s110 1645031357
 !i10b 1
-!s100 VRPNL[?Kl7c;z@594SZz50
+!s100 8dLi^J30oH[:E@N[nDE3n2
 R2
-I5Sm86m2o_]UG477ZYNB1W1
+IkHjmYJ;EK[<X;eAk[Y=IZ2
 R3
 S1
 R4
-w1644993280
+w1645031344
 8../ifetch.sv
 F../ifetch.sv
-!i122 232
+!i122 262
 L0 33 143
 R6
 r1
@@ -167,7 +167,7 @@ R9
 n@i@f@e@c@t@c@h
 vMIPS
 R0
-Z10 !s110 1644996906
+R10
 !i10b 1
 !s100 QiIEeG@LOWS?Yc9gRnDF;2
 R2
@@ -178,13 +178,13 @@ R4
 w1644996614
 8../mips.sv
 F../mips.sv
-!i122 233
+!i122 263
 L0 39 343
 R6
 r1
 !s85 0
 31
-R7
+Z11 !s108 1645031357.000000
 !s107 ../mips.sv|
 !s90 -reportprogress|300|-work|work|../mips.sv|
 !i113 1
@@ -204,13 +204,13 @@ R4
 w1644996902
 8../mips_tb.sv
 F../mips_tb.sv
-!i122 236
+!i122 266
 L0 21 96
 R6
 r1
 !s85 0
 31
-Z11 !s108 1644996906.000000
+R11
 !s107 ../mips_tb.sv|
 !s90 -reportprogress|300|-work|work|../mips_tb.sv|
 !i113 1
@@ -221,16 +221,16 @@ vSTALL_CONT
 R0
 R10
 !i10b 1
-!s100 [mJ`Cb5lR69NeW2bY>9Zj1
+!s100 feEg2f3WjiN=GI7;0RW7S2
 R2
-IWZ78hz47T9=TbBo]EESFc0
+IoC1[DhY8S697mSg@oo:I?1
 R3
 S1
 R4
-w1644991488
+w1644998656
 8../stall_cont.sv
 F../stall_cont.sv
-!i122 234
+!i122 264
 L0 28 92
 R6
 r1
@@ -256,7 +256,7 @@ R4
 R5
 8../write_back.sv
 F../write_back.sv
-!i122 235
+!i122 265
 L0 41 37
 R6
 r1

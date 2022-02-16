@@ -72,11 +72,12 @@ logic MemWrite_out           ;
 logic RegWrite_out           ;
 logic stall_out              ;
 logic [6:0] cycle_cnt       ;
-logic [4:0] dec_rt_out;
 logic [4:0] dec_rs_out;
+logic [4:0] dec_rt_out;
+logic [4:0] dest_out;
 logic [1:0] op_FA_out;
 logic [1:0] op_FB_out;
-logic [4:0] dest_out;
+
 
 initial
   cycle_cnt = 0;
@@ -107,9 +108,9 @@ MIPS my_MIPS_processor
     .stall_out        (stall_out        ),
     .dec_rs_out       (dec_rs_out),
     .dec_rt_out       (dec_rt_out),
+    .dest_out         (dest_out),
     .op_FA_out        (op_FA_out),
-    .op_FB_out        (op_FB_out),
-    .dest_out         (dest_out)
+    .op_FB_out        (op_FB_out)
 );
 
     
