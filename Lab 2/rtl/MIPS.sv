@@ -57,6 +57,7 @@ module MIPS (
     output logic RegWrite_out,
     output logic RegWrite_mem_out,
     output logic RegWrite_wb_out,
+    output logic MemtoReg_out,
     output logic stall_out, 
     output logic [4:0] dec_rt_out,
     output logic [4:0] dec_rs_out,
@@ -137,6 +138,7 @@ module MIPS (
     assign B_input_out = B_input;
     assign Branch_out       = Branch;
     assign Zero_out         = Zero;
+    assign MemtoReg_out     = MemtoReg;
     assign RegWrite_out     = RegWrite;
     assign RegWrite_mem_out = sig_RegWrite_EX;
     assign RegWrite_wb_out  = sig_RegWrite_WB;
@@ -165,6 +167,9 @@ STALL_CONT my_STALL_CONT(
     .ip_Lw      (Lw      ),
     .ip_Sw      (Sw      ),
     .ip_Beq     (Beq     ),
+
+    //LW input
+    .ip_MemtoReg(MemtoReg),
 
     //RegWrite flags from the different stages
     .ip_RegWrite_EX (RegWrite ),
@@ -274,7 +279,6 @@ IDECODE my_IDECODE(
 );
 
 FWD_CONT FWD_CONT(
-
 	.ip_EX_MEM_RegWrite(sig_RegWrite_EX),
 	.ip_MEM_WB_RegWrite(sig_RegWrite_MEM),
 	.ip_EX_MEM_dest(dest_EX),

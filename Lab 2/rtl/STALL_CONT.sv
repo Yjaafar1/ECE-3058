@@ -45,6 +45,9 @@ module STALL_CONT(
     input logic [4:0] ip_dest_EX  ,
     input logic [4:0] ip_dest_MEM ,
     input logic [4:0] ip_dest_WB  ,
+
+    //Check if LW further up the pipeline
+    input logic ip_MemtoReg,
     
     //Outputs
     output logic op_stall
@@ -91,7 +94,7 @@ module STALL_CONT(
     
     //Check to see if any of the stages have RS hazards
     logic RS_hazard;
-    assign RS_hazard = RS_EX_hazard;// | RS_MEM_hazard; //RS_EX_hazard | RS_MEM_hazard | RS_WB_hazard;
+    assign RS_hazard = RS_EX_hazard && ip_MemtoReg;// | RS_MEM_hazard; //RS_EX_hazard | RS_MEM_hazard | RS_WB_hazard;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Check if there is a hazard on RT
@@ -108,7 +111,7 @@ module STALL_CONT(
     
     //Check to see if any of the stages have RS hazards
     logic RT_hazard;
-    assign RT_hazard = RT_EX_hazard;// | RT_MEM_hazard; //RT_EX_hazard | RT_MEM_hazard | RT_WB_hazard;
+    assign RT_hazard = RT_EX_hazard && ip_MemtoReg;// | RT_MEM_hazard; //RT_EX_hazard | RT_MEM_hazard | RT_WB_hazard;
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
