@@ -72,13 +72,13 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
             instr_RAM[i] = 0; //initialize the RAM with all zeros
         
         instr_RAM[0] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[1] = 32'b00100100001000010000000000000010; // addi $1, $1, 2
-        instr_RAM[2] = 32'h8C020000;                         // lw $2,0 ;memory(00)=55555555
-        instr_RAM[3] = 32'b00000000001000100001100000100000; // add $3, $1, $2
-        instr_RAM[4] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[5] = 32'h00000000;
-        instr_RAM[6] = 32'h00000000;
-        instr_RAM[7] = 32'h00000000;
+        //instr_RAM[1] = 32'b00100100001000010000000000000010; // addi $1, $1, 2
+        instr_RAM[1] = 32'h8C020000;                         // lw $2,0 ;memory(00)=55555555
+        instr_RAM[2] = 32'b00000000001000100001100000100000; // add $3, $1, $2
+        // instr_RAM[4] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[5] = 32'h00000000;
+        // instr_RAM[6] = 32'h00000000;
+        // instr_RAM[7] = 32'h00000000;
 
         // instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
         // instr_RAM[1] = 32'h00000000;     //   nop fill pipeline

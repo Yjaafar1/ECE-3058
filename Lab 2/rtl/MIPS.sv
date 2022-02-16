@@ -53,7 +53,12 @@ module MIPS (
     output logic Zero_out,
     output logic MemWrite_out,
     output logic RegWrite_out,
-    output logic stall_out
+    output logic stall_out, 
+    output logic [4:0] dec_rt_out,
+    output logic [4:0] dec_rs_out,
+    output logic [1:0] op_FA_out,
+    output logic [1:0] op_FB_out,
+    output logic [4:0] dest_out
     );
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,6 +130,11 @@ module MIPS (
     assign RegWrite_out     = RegWrite;
     assign MemWrite_out     = MemWrite;
     assign stall_out        = stall;
+    assign dec_rt_out = dec_rt;
+    assign dec_rs_out = dec_rs;
+    assign op_FA_out = op_FA;
+    assign op_FB_out = op_FB;
+    assign dest_out = dest;
 
 
 
