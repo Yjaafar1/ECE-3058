@@ -49,18 +49,22 @@ module MIPS (
     output logic [31:0] read_data_2_out,
     output logic [31:0] write_data_out,
     output logic [31:0] Instruction_out,
+    output logic [31:0] A_input_out,
+    output logic [31:0] B_input_out,
     output logic Branch_out,
     output logic Zero_out,
     output logic MemWrite_out,
     output logic RegWrite_out,
+    output logic RegWrite_mem_out,
+    output logic RegWrite_wb_out,
     output logic stall_out, 
     output logic [4:0] dec_rt_out,
     output logic [4:0] dec_rs_out,
     output logic [1:0] op_FA_out,
     output logic [1:0] op_FB_out,
-    output logic [4:0] dest_out
-    output logic [4:0] dest_EX_out  ;
-    output logic [4:0] dest_MEM_out;
+    output logic [4:0] dest_out,
+    output logic [4:0] dest_EX_out,
+    output logic [4:0] dest_MEM_out
     );
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -77,6 +81,8 @@ module MIPS (
     logic [31:0] ALU_result    ;
     logic [31:0] ALU_result_MEM;
     logic [31:0] read_data     ;
+    logic [31:0] A_input;
+    logic [31:0] B_input;
     logic ALUSrc               ;
     logic Branch               ;
     logic branch_EX            ;
@@ -127,9 +133,13 @@ module MIPS (
     assign read_data_1_out  = read_data_1;
     assign read_data_2_out  = read_data_2;
     assign write_data_out   = write_data_WB;
+    assign A_input_out = A_input;
+    assign B_input_out = B_input;
     assign Branch_out       = Branch;
     assign Zero_out         = Zero;
     assign RegWrite_out     = RegWrite;
+    assign RegWrite_mem_out = sig_RegWrite_EX;
+    assign RegWrite_wb_out  = sig_RegWrite_WB;
     assign MemWrite_out     = MemWrite;
     assign stall_out        = stall;
     assign dec_rt_out = dec_rt;
@@ -316,6 +326,8 @@ EXECUTE my_EXECUTE(
     .op_Add_result   (Add_result),
     .op_memory_write_data(memory_write_data),
     .op_dest_reg         (dest_EX),
+    .op_A_input       (A_input),
+    .op_B_input       (B_input),
 
     //clock and reset signals
     .clock  (clock),

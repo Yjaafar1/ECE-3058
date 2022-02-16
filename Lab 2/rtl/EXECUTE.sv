@@ -96,6 +96,8 @@ module EXECUTE (
     output logic [7:0]  op_Add_result       ,
     output logic [31:0] op_memory_write_data,
     output logic [4:0]  op_dest_reg         ,
+    output logic [31:0] op_A_input,
+    output logic [31:0] op_B_input,
     
     //clock and reset signals
     input logic clock,
@@ -262,6 +264,8 @@ module EXECUTE (
     assign op_read_en  = reg_read_en  ;
     assign op_write_en = reg_write_en ;
     assign op_branch   = reg_branch   ;
+    assign op_A_input = A_input;
+    assign op_B_input = B_input;
 
 endmodule
 

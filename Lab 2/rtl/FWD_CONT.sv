@@ -56,9 +56,9 @@ logic dest_match_MEM_WB_B;
 assign dest_match_MEM_WB_B = ip_MEM_WB_dest == ip_DEC_DEST_RT;
 
 always @(*) begin
-    if (ip_EX_MEM_RegWrite && ip_DEC_DEST_RT && dest_match_EX_MEM_A) 
+    if (ip_EX_MEM_RegWrite && ip_DEC_DEST_RT && dest_match_EX_MEM_B) 
         op_FB = 2'b10;
-    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RT && dest_match_MEM_WB_A) 
+    else if (ip_MEM_WB_RegWrite && ip_DEC_DEST_RT && dest_match_MEM_WB_B) 
         op_FB = 2'b01;
     else 
         op_FB = 2'b00;
