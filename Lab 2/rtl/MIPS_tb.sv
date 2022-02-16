@@ -77,6 +77,8 @@ logic [4:0] dec_rt_out;
 logic [4:0] dest_out;
 logic [1:0] op_FA_out;
 logic [1:0] op_FB_out;
+logic [4:0] dest_EX_out  ;
+logic [4:0] dest_MEM_out;
 
 
 initial
@@ -110,7 +112,9 @@ MIPS my_MIPS_processor
     .dec_rt_out       (dec_rt_out),
     .dest_out         (dest_out),
     .op_FA_out        (op_FA_out),
-    .op_FB_out        (op_FB_out)
+    .op_FB_out        (op_FB_out),
+    .dest_EX_out      (dest_EX_out),
+    .dest_MEM_out     (dest_MEM_out)
 );
 
     

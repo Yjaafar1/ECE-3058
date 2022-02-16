@@ -59,6 +59,8 @@ module MIPS (
     output logic [1:0] op_FA_out,
     output logic [1:0] op_FB_out,
     output logic [4:0] dest_out
+    output logic [4:0] dest_EX_out  ;
+    output logic [4:0] dest_MEM_out;
     );
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,6 +137,8 @@ module MIPS (
     assign op_FA_out = op_FA;
     assign op_FB_out = op_FB;
     assign dest_out = dest;
+    assign dest_EX_out = dest_EX  ;
+    assign dest_MEM_out = dest_MEM ;
 
 
 
