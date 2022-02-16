@@ -71,13 +71,25 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         for (int i = 0; i < PARAM_RAM_length; i++) 
             instr_RAM[i] = 0; //initialize the RAM with all zeros
         
-        instr_RAM[0] = 32'b00100100001000010000000000000010; //addi $1, $1, 2
-        instr_RAM[1] = 32'b00100100010000100000000000000010; //addi $2, $2, 2
-        instr_RAM[2] = 32'b00000000001000100001100000100000; //addi $3, $1, $2
-        instr_RAM[3] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[4] = 32'h00000000;
+        instr_RAM[0] = 32'h00000000;                         // nop fill pipeline
+        instr_RAM[1] = 32'b00100100001000010000000000000010; // addi $1, $1, 2
+        instr_RAM[2] = 32'h8C020000;                         // lw $2,0 ;memory(00)=55555555
+        instr_RAM[3] = 32'b00000000001000100001100000100000; // add $3, $1, $2
+        instr_RAM[4] = 32'h00000000;                         // nop fill pipeline
         instr_RAM[5] = 32'h00000000;
         instr_RAM[6] = 32'h00000000;
+        instr_RAM[7] = 32'h00000000;
+
+        // instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[3] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        // instr_RAM[4] = 32'h01220820;     //   add $1 $9 $2 // reg 1  0x55555557
+        // instr_RAM[5] = 32'h8C080004;     //   LW $8 0x4($0) // reg 8 0xAAAAAAAA
+        // instr_RAM[6] = 32'h01061820;     //   add $3 $8 $6 // reg 3 0xAAAAAAB0
+        // instr_RAM[7] = 32'hac090004;     //   SW $9 0x4($0) // store 0x55555555 to memory
+
+
         // //Put the program here
         // instr_RAM[0] = 32'h00000000;   // nop fill pipeline
         // instr_RAM[1] = 32'h00000000;   // nop fill pipeline
