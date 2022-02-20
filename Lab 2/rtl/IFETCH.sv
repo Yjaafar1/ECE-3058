@@ -74,8 +74,8 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         instr_RAM[0] = 32'h00000000;                         // nop fill pipeline
         instr_RAM[1] = 32'h00000000;                         // nop fill pipeline
         instr_RAM[2] = 32'h00000000;                         // nop fill pipeline
-        //instr_RAM[1] = 32'b00000000001000100001000000100000;    // add $2, $1, $2
-        instr_RAM[3] = 32'h8C020000;                            // lw $2,0 ;memory(00)=55555555
+        instr_RAM[3] = 32'b00000000001000100001000000100000;    // add $2, $1, $2
+        //instr_RAM[3] = 32'h8C020000;                            // lw $2,0 ;memory(00)=55555555
         instr_RAM[4] = 32'b00000000001000100001100000100000;    // add $3, $1, $2
         instr_RAM[5] = 32'h00000000;                         // nop fill pipeline
         instr_RAM[6] = 32'h00000000;                         // nop fill pipeline
@@ -159,7 +159,7 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
     
     //Register block
     always @ (posedge clock) begin
-        if (reset) begin
+        if (reset || ip_zero && ip_branch) begin
             reg_instruction <= 0;
             reg_PC          <= 0;
             end

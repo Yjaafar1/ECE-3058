@@ -58,6 +58,10 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 module EXECUTE (
     //Inputs
+    // --flushing signals--
+    input logic ip_branch_EX, 
+    input logic ip_zero,
+
     //  --from decode--
 	input logic [5:0] ip_opcode,
     input logic [5:0]  ip_function_opcode ,
@@ -104,7 +108,7 @@ module EXECUTE (
     input logic reset,
 
 	//forwarding Signals
-	input logic [31:0] ALU_result_MEM,
+	input logic [31:0] ALU_result,
 	input logic [31:0] read_data_wb,
 	input logic MemtoReg_MEM,
 	input logic [1:0] FA,
@@ -121,7 +125,7 @@ module EXECUTE (
 	////Add forwarding
 	always @(*) begin
         if (FA == 2'b10)
-            A_input = ALU_result_MEM;
+            A_input = ALU_result;
         else if (FA == 2'b01)
             A_input = read_data_wb;
         else 
@@ -130,7 +134,7 @@ module EXECUTE (
 
     always @(*) begin
         if (FB == 2'b10)
-            B_input = ALU_result_MEM;
+            B_input = ALU_result;
         else if (FB == 2'b01)
             B_input = read_data_wb;
         else if (ip_ALU_src)
@@ -217,7 +221,7 @@ module EXECUTE (
     
     //Register block
     always @ (posedge clock) begin    
-        if (reset) begin 
+        if (reset || ip_zero && ip_branch_EX) begin 
             reg_ALU_result        <= 0;
             reg_Add_result        <= 0;
             reg_memory_write_data <= 0;    //this is a pass through

@@ -134,7 +134,7 @@ module IDECODE(
 
     //Register block
     always @ (posedge clock) begin
-	   if(reset) begin
+	   if(reset || ip_zero && ip_branch) begin
         reg_function_opcode <= 0;
 		reg_read_data_1  <= 0;
         reg_read_data_2  <= 0;

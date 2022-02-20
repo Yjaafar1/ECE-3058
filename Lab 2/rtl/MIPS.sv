@@ -293,6 +293,10 @@ FWD_CONT FWD_CONT(
 
 EXECUTE my_EXECUTE(
     //Inputs
+    // --flushing signals--
+    .ip_zero        (Zero       ),
+    .ip_branch_EX  (branch_EX),
+
     //  --from decode--
     .ip_function_opcode  (function_opcode),
     .ip_PC_plus_4        (PC_plus_4_ID),
@@ -337,7 +341,7 @@ EXECUTE my_EXECUTE(
     .clock  (clock),
     .reset  (reset),
 	//forwarding Signals
-	.ALU_result_MEM(ALU_result_MEM),
+	.ALU_result(ALU_result),
 	.read_data_wb(read_data),
 	.MemtoReg_MEM(MemtoReg_MEM),
 	.FA(op_FA),
