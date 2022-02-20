@@ -71,18 +71,36 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         for (int i = 0; i < PARAM_RAM_length; i++) 
             instr_RAM[i] = 0; //initialize the RAM with all zeros
         
-        instr_RAM[0] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[1] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[2] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[3] = 32'b00000000001000100001000000100000;    // add $2, $1, $2
-        //instr_RAM[3] = 32'h8C020000;                            // lw $2,0 ;memory(00)=55555555
-        instr_RAM[4] = 32'b00000000001000100001100000100000;    // add $3, $1, $2
-        instr_RAM[5] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[6] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[7] = 32'h00000000;                         // nop fill pipeline
-        instr_RAM[8] = 32'h00000000;                             // nop fill pipeline
-        instr_RAM[9] = 32'h00000000;                              // nop fill pipeline
-        instr_RAM[10] = 32'b00000000000000110001100000100000;    // add $3, $0, $3
+        instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        instr_RAM[3] = 32'b00010000001000010000000000000000;
+        instr_RAM[4] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        instr_RAM[5] = 32'h01220820;     //   add $1 $9 $2 // reg 1  0x55555557
+        instr_RAM[6] = 32'h8C080004;     //   LW $8 0x4($0) // reg 8 0xAAAAAAAA
+
+        // instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[3] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        // instr_RAM[4] = 32'h01220820;     //   add $1 $9 $2 // reg 1  0x55555557
+        // instr_RAM[5] = 32'h8C080004;     //   LW $8 0x4($0) // reg 8 0xAAAAAAAA
+        // instr_RAM[6] = 32'h01061820;     //   add $3 $8 $6 // reg 3 0xAAAAAAB0
+        // instr_RAM[7] = 32'hac090004;     //   SW $9 0x4($0) // store 0x55555555 to memory
+
+
+        // instr_RAM[0] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[1] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[2] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[3] = 32'b00000000001000100001000000100000;    // add $2, $1, $2
+        // //instr_RAM[3] = 32'h8C020000;                            // lw $2,0 ;memory(00)=55555555
+        // instr_RAM[4] = 32'b00000000001000100001100000100000;    // add $3, $1, $2
+        // instr_RAM[5] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[6] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[7] = 32'h00000000;                         // nop fill pipeline
+        // instr_RAM[8] = 32'h00000000;                             // nop fill pipeline
+        // instr_RAM[9] = 32'h00000000;                              // nop fill pipeline
+        // instr_RAM[10] = 32'b00000000000000110001100000100000;    // add $3, $0, $3
         // instr_RAM[4] = 32'h00000000;                         // nop fill pipeline
         // instr_RAM[5] = 32'h00000000;
         // instr_RAM[6] = 32'h00000000;
@@ -159,7 +177,7 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
     
     //Register block
     always @ (posedge clock) begin
-        if (reset || ip_zero && ip_branch) begin
+        if (reset) begin
             reg_instruction <= 0;
             reg_PC          <= 0;
             end
@@ -176,8 +194,18 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Assign the Outputs
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    assign op_instruction = reg_instruction;
-    assign op_PC          = reg_PC;
-    assign op_PC_plus_4   = reg_PC + 4;
+    always @(*) begin
+        if (ip_zero && ip_branch) begin
+            op_instruction = 0;
+            op_PC          = 0;
+            op_PC_plus_4   = 0;
+            end
+        else begin
+            op_instruction = reg_instruction;
+            op_PC          = reg_PC;
+            op_PC_plus_4   = reg_PC + 4;
+            end
+    end
+    
 
 endmodule

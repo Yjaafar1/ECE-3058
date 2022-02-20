@@ -109,6 +109,7 @@ module EXECUTE (
 
 	//forwarding Signals
 	input logic [31:0] ALU_result,
+    input logic [31:0] ALU_result_MEM,
 	input logic [31:0] read_data_wb,
 	input logic MemtoReg_MEM,
 	input logic [1:0] FA,
@@ -126,8 +127,12 @@ module EXECUTE (
 	always @(*) begin
         if (FA == 2'b10)
             A_input = ALU_result;
-        else if (FA == 2'b01)
-            A_input = read_data_wb;
+        else if (FA == 2'b01) begin
+            if (MemtoReg_MEM)
+                A_input = read_data_wb;
+            else
+                A_input = ALU_result_MEM;
+        end
         else 
             A_input = ip_read_data_1;
     end
@@ -136,7 +141,10 @@ module EXECUTE (
         if (FB == 2'b10)
             B_input = ALU_result;
         else if (FB == 2'b01)
-            B_input = read_data_wb;
+            if (MemtoReg_MEM)
+                B_input = read_data_wb;
+            else
+                B_input = ALU_result_MEM;
         else if (ip_ALU_src)
             B_input = ip_immediate;
         else 
@@ -255,21 +263,44 @@ module EXECUTE (
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Assign the Outputs
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
-    //data outputs
-    assign op_ALU_result         = reg_ALU_result        ;
-    assign op_Add_result         = reg_Add_result        ;
-    assign op_memory_write_data  = reg_memory_write_data ;
-    assign op_dest_reg           = reg_dest_reg          ;
-    
-    //control outputs
-    assign op_zero     = reg_zero     ;
-    assign op_MemtoReg = reg_MemtoReg ;
-    assign op_RegWrite = reg_RegWrite ;
-    assign op_read_en  = reg_read_en  ;
-    assign op_write_en = reg_write_en ;
-    assign op_branch   = reg_branch   ;
-    assign op_A_input = A_input;
-    assign op_B_input = B_input;
+    always @(*) begin
+        if (ip_zero && ip_branch) begin
+             //data outputs
+            op_ALU_result         = 0        ;
+            op_Add_result         = 0        ;
+            op_memory_write_data  = 0 ;
+            op_dest_reg           = 0         ;
+            
+            //control outputs
+            op_zero     = 0     ;
+            op_MemtoReg = 0 ;
+            op_RegWrite = 0 ;
+            op_read_en  = 0  ;
+            op_write_en = 0 ;
+            op_branch   = 0   ;
+            op_A_input = 0;
+            op_B_input = 0;
+            end
+        else begin
+             //data outputs
+            op_ALU_result         = reg_ALU_result        ;
+            op_Add_result         = reg_Add_result        ;
+            op_memory_write_data  = reg_memory_write_data ;
+            op_dest_reg           = reg_dest_reg          ;
+            
+            //control outputs
+            op_zero     = reg_zero     ;
+            op_MemtoReg = reg_MemtoReg ;
+            op_RegWrite = reg_RegWrite ;
+            op_read_en  = reg_read_en  ;
+            op_write_en = reg_write_en ;
+            op_branch   = reg_branch   ;
+            op_A_input = A_input;
+            op_B_input = B_input;
+            end
+    end
+
+   
 
 endmodule
 

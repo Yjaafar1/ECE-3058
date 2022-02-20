@@ -342,6 +342,7 @@ EXECUTE my_EXECUTE(
     .reset  (reset),
 	//forwarding Signals
 	.ALU_result(ALU_result),
+    .ALU_result_MEM(ALU_result_MEM),
 	.read_data_wb(read_data),
 	.MemtoReg_MEM(MemtoReg_MEM),
 	.FA(op_FA),
