@@ -11,7 +11,7 @@ cModel Technology
 dC:/Users/jaafa/Documents/GitHub/ECE-3058/Lab 2/rtl/ModelSim
 vCONTROL
 Z0 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
-Z1 !s110 1645350960
+Z1 !s110 1645402011
 !i10b 1
 !s100 K0co<^OaAUJ4?GE2kF0X30
 Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -22,13 +22,13 @@ Z4 dC:/Users/jaafa/OneDrive/Documents/GitHub/Clones/ECE-3058/Lab 2/rtl/ModelSim
 Z5 w1644209485
 8../control.sv
 F../control.sv
-!i122 567
+!i122 647
 L0 44 136
 Z6 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z7 !s108 1645350960.000000
+Z7 !s108 1645402011.000000
 !s107 ../control.sv|
 !s90 -reportprogress|300|-work|work|../control.sv|
 !i113 1
@@ -48,7 +48,7 @@ R4
 R5
 8../dmemory.sv
 F../dmemory.sv
-!i122 568
+!i122 648
 L0 44 121
 R6
 r1
@@ -65,17 +65,17 @@ vEXECUTE
 R0
 R1
 !i10b 1
-!s100 TIjl>eQ3;DJ7bARI1lSQO1
+!s100 H_Wl=_04G]1]CIYF`F6=T3
 R2
-IKaLkLJJPNd8G>2Jo78nko0
+I_JJ^^D=_ozaG^A:`T7WmZ0
 R3
 S1
 R4
-w1645328321
+w1645400465
 8../execute.sv
 F../execute.sv
-!i122 569
-L0 59 224
+!i122 649
+L0 59 246
 R6
 r1
 !s85 0
@@ -89,7 +89,7 @@ R9
 n@e@x@e@c@u@t@e
 vFWD_CONT
 R0
-!s110 1645350961
+R1
 !i10b 1
 !s100 ^3e?Q2Afihi>1N2GXK;6A1
 R2
@@ -100,7 +100,7 @@ R4
 Z10 w1645136481
 8../fwd_cont.sv
 F../fwd_cont.sv
-!i122 570
+!i122 650
 L0 28 40
 R6
 r1
@@ -115,24 +115,24 @@ R9
 n@f@w@d_@c@o@n@t
 vIDECODE
 R0
-Z11 !s110 1645350962
+R1
 !i10b 1
-!s100 k<14CAC0o^:i]RReZZETf3
+!s100 K_lj=4=`INAFfz3_fDKTb2
 R2
-IdB3l_1bG;5zmRez<OVVeT0
+IZCmARgYOPoS8SzlQ:6aXi1
 R3
 S1
 R4
-w1645325143
+w1645351466
 8../idecode.sv
 F../idecode.sv
-!i122 571
-L0 40 143
+!i122 651
+L0 40 160
 R6
 r1
 !s85 0
 31
-!s108 1645350961.000000
+R7
 !s107 ../idecode.sv|
 !s90 -reportprogress|300|-work|work|../idecode.sv|
 !i113 1
@@ -141,24 +141,24 @@ R9
 n@i@d@e@c@o@d@e
 vIFECTCH
 R0
-R11
+R1
 !i10b 1
-!s100 =2Ck;i=bFPc:ET`STVTCi2
+!s100 6IDV<njX^PkfX418`QKm?2
 R2
-IC<KfGUgYQB:S1`>aWDN>30
+Ik5^ncCCgcgm[WPLSUO:HF1
 R3
 S1
 R4
-w1645350947
+w1645401999
 8../ifetch.sv
 F../ifetch.sv
-!i122 572
-L0 33 169
+!i122 652
+L0 33 180
 R6
 r1
 !s85 0
 31
-Z12 !s108 1645350962.000000
+R7
 !s107 ../ifetch.sv|
 !s90 -reportprogress|300|-work|work|../ifetch.sv|
 !i113 1
@@ -167,7 +167,7 @@ R9
 n@i@f@e@c@t@c@h
 vMIPS
 R0
-R11
+Z11 !s110 1645402012
 !i10b 1
 !s100 baia?9DTFHQ1NMLDXM<XZ0
 R2
@@ -175,16 +175,16 @@ IUVjhJKb@zbo8R6jfgJ1Lz0
 R3
 S1
 R4
-w1645328344
+w1645396931
 8../mips.sv
 F../mips.sv
-!i122 573
+!i122 653
 L0 39 368
 R6
 r1
 !s85 0
 31
-R12
+R7
 !s107 ../mips.sv|
 !s90 -reportprogress|300|-work|work|../mips.sv|
 !i113 1
@@ -193,7 +193,7 @@ R9
 n@m@i@p@s
 vMIPS_pipelined_tb
 R0
-!s110 1645350963
+R11
 !i10b 1
 !s100 QA=QdBGfb:>cS[onaVY[Y0
 R2
@@ -204,13 +204,13 @@ R4
 R10
 8../mips_tb.sv
 F../mips_tb.sv
-!i122 576
+!i122 656
 L0 21 111
 R6
 r1
 !s85 0
 31
-R12
+Z12 !s108 1645402012.000000
 !s107 ../mips_tb.sv|
 !s90 -reportprogress|300|-work|work|../mips_tb.sv|
 !i113 1
@@ -230,7 +230,7 @@ R4
 w1645136482
 8../stall_cont.sv
 F../stall_cont.sv
-!i122 574
+!i122 654
 L0 28 95
 R6
 r1
@@ -256,7 +256,7 @@ R4
 R5
 8../write_back.sv
 F../write_back.sv
-!i122 575
+!i122 655
 L0 41 37
 R6
 r1
