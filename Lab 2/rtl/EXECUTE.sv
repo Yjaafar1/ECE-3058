@@ -121,8 +121,8 @@ module EXECUTE (
     //variables
     logic signed [31:0] A_input, B_input;
     
-    //form the input dat0
-	////Add forwarding
+    // input data
+    // Accept forwarded data from after EX, after MEM ALU, after MEM mem data
 	always @(*) begin
         if (FA == 2'b10)
             A_input = ALU_result;
@@ -135,7 +135,7 @@ module EXECUTE (
         else 
             A_input = ip_read_data_1;
     end
-
+    // Accept forwarded data from after EX, after MEM ALU, after MEM mem data, immediate
     always @(*) begin
         if (FB == 2'b10)
             B_input = ALU_result;

@@ -43,6 +43,9 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 module CONTROL(
     //Inputs
+    //  --from Hazard Detection--
+    input logic ip_stall,
+
     // --flushing signals--
     input logic ip_zero,
     input logic ip_branch_EX,
@@ -158,6 +161,7 @@ module CONTROL(
     
     //Register block
     always @ (posedge clock) begin
+        // flush registers
         if (ip_zero && ip_branch_EX) begin
             reg_RegDst   <= 0   ;    
             reg_MemtoReg <= 0 ;
@@ -183,12 +187,13 @@ module CONTROL(
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Assign outputs
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    assign op_RegDst   = reg_RegDst   ;
     assign op_MemtoReg = reg_MemtoReg ;   
     assign op_RegWrite = reg_RegWrite ;   
     assign op_read_en  = reg_read_en  ;   
     assign op_write_en = reg_write_en ;   
-    assign op_branch   = reg_branch   ;   
+    // make sure no registers written to and no branching performed if stalling
+    assign op_RegDst   = ip_stall ? 0 : reg_RegDst   ;
+    assign op_branch   = ip_stall ? 0 : reg_branch   ;   
     assign op_ALU_src  = reg_ALU_src  ;   
     assign op_ALU_op   = reg_ALU_op   ;
 

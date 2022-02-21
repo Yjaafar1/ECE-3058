@@ -117,6 +117,9 @@ module STALL_CONT(
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Check Combine RS and RT hazards
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ONLY EVER STALLS IN LW CASE
+    // REQUIRES INFO FROM DOWN PIPELINE TO WORK CORRECTLY 
+    // IP_MEMTOREG SIGNIFIES IF A LW IS OCCURING FURTHER DOWN THE PIPELINE
     assign op_stall = RS_hazard | RT_hazard;
 
 endmodule

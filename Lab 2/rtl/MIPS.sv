@@ -186,6 +186,9 @@ STALL_CONT my_STALL_CONT(
 
 CONTROL my_CONTROL(
     //Inputs
+    //  --from Hazard Detection--
+    .ip_stall   (stall),
+
     // --flushing signals--
     .ip_zero        (Zero       ),
     .ip_branch_EX  (branch_EX),

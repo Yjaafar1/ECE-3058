@@ -74,10 +74,25 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
         instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
         instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
-        instr_RAM[3] = 32'b00010000001000011111111111111111; //beq $1, $1, -4
-        instr_RAM[4] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
-        //instr_RAM[5] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
-        instr_RAM[5] = 32'b00010000001000011111111111110000; //beq $1, $1, -4
+        instr_RAM[3] = 32'h00430820;     //   add $1 $2 $3    // reg 1 5
+        instr_RAM[4] = 32'h00410820;     //   add $1 $2 $1    // reg 1 7
+        instr_RAM[5] = 32'h00220820;     //   add $1 $1 $2    // reg 1 9
+        instr_RAM[6] = 32'h01210825;     //   or $1 $9 $1     // reg 1 9
+        instr_RAM[7] = 32'h01211025;     //   or $2 $9 $1     // reg 2 9
+        instr_RAM[8] = 32'h00000000;     //   NOP gap to help test 2 ahead
+        instr_RAM[9] = 32'h01221025;     //   or $2 $9 $2     // reg 2 9
+        instr_RAM[10] = 32'h01260822;    //   sub $1 $9 $6    // reg 1 3
+        instr_RAM[11] = 32'h00C90820;    //   add $1 $6 $9    // reg 1 F
+        instr_RAM[12] = 32'h01E11022;    //    sub $2 $15 $1  // reg 2 0
+        instr_RAM[13] = 32'h00000000;    //   nop
+
+        // instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
+        // instr_RAM[3] = 32'b00010000001000011111111111111111; //beq $1, $1, -4
+        // instr_RAM[4] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        // //instr_RAM[5] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        // instr_RAM[5] = 32'b00010000001000011111111111110000; //beq $1, $1, -4
         
 
     end 
@@ -129,6 +144,7 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
     
     //Register block
     always @ (posedge clock) begin
+        // flush registers
         if (reset || ip_zero && ip_branch) begin
             reg_instruction <= 0;
             reg_PC          <= 0;
