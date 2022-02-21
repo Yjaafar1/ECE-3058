@@ -229,7 +229,7 @@ module EXECUTE (
     
     //Register block
     always @ (posedge clock) begin    
-        if (reset || ip_zero && ip_branch) begin 
+        if (reset || ip_zero && ip_branch_EX) begin 
             reg_ALU_result        <= 0;
             reg_Add_result        <= 0;
             reg_memory_write_data <= 0;    //this is a pass through
@@ -269,7 +269,7 @@ module EXECUTE (
     assign op_memory_write_data  = reg_memory_write_data ;
     assign op_dest_reg           = reg_dest_reg          ;
             
-            //control outputs
+    //control outputs
     assign op_MemtoReg = reg_MemtoReg ;
     assign op_RegWrite = reg_RegWrite ;
     assign  op_read_en  = reg_read_en  ;

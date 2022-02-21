@@ -74,7 +74,7 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         instr_RAM[0] = 32'h00000000;     //   nop fill pipeline
         instr_RAM[1] = 32'h00000000;     //   nop fill pipeline
         instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
-        instr_RAM[3] = 32'b00010000001000010000000011111100; //beq $1, $1, -4
+        instr_RAM[3] = 32'b00010000001000011111111111111111; //beq $1, $1, -4
         instr_RAM[4] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
         instr_RAM[5] = 32'h01220820;     //   add $1 $9 $2 // reg 1  0x55555557
         instr_RAM[6] = 32'h8C080004;     //   LW $8 0x4($0) // reg 8 0xAAAAAAAA
@@ -99,7 +99,7 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
     //combinational logic to determine next PC value
     always @ (*) 
         if(ip_zero && ip_branch)
-            Next_PC <= ip_add_result + 4;
+            Next_PC <= ip_add_result;
         else if (ip_stall)  //if the stall signal is high we want to stop the PC until the stall condition has passed.
             Next_PC <= PC;
         else
