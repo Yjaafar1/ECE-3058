@@ -229,7 +229,7 @@ module EXECUTE (
     
     //Register block
     always @ (posedge clock) begin    
-        if (reset) begin 
+        if (reset || ip_zero && ip_branch) begin 
             reg_ALU_result        <= 0;
             reg_Add_result        <= 0;
             reg_memory_write_data <= 0;    //this is a pass through
@@ -263,38 +263,20 @@ module EXECUTE (
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Assign the Outputs
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
-    always @(*) begin
-        if (ip_zero && ip_branch_EX) begin
-             //data outputs
-            op_ALU_result         = 0        ;
-            op_memory_write_data  = 0 ;
-            op_dest_reg           = 0         ;
+
+      //data outputs
+    assign op_ALU_result         = reg_ALU_result        ;
+    assign op_memory_write_data  = reg_memory_write_data ;
+    assign op_dest_reg           = reg_dest_reg          ;
             
             //control outputs
-            op_MemtoReg = 0 ;
-            op_RegWrite = 0 ;
-            op_read_en  = 0  ;
-            op_write_en = 0 ;
-            op_A_input = 0;
-            op_B_input = 0;
-            end
-        else begin
-             //data outputs
-            op_ALU_result         = reg_ALU_result        ;
-            op_memory_write_data  = reg_memory_write_data ;
-            op_dest_reg           = reg_dest_reg          ;
-            
-            //control outputs
-            op_MemtoReg = reg_MemtoReg ;
-            op_RegWrite = reg_RegWrite ;
-            op_read_en  = reg_read_en  ;
-            op_write_en = reg_write_en ;
-            op_A_input = A_input;
-            op_B_input = B_input;
-            end
-    end
-    // left outside of flushing mux
-    // need to be clear for the branch instruction
+    assign op_MemtoReg = reg_MemtoReg ;
+    assign op_RegWrite = reg_RegWrite ;
+    assign  op_read_en  = reg_read_en  ;
+    assign op_write_en = reg_write_en ;
+    assign op_A_input = A_input;
+    assign op_B_input = B_input;
+
     assign op_branch   = reg_branch   ;
     assign op_zero     = reg_zero     ;
     assign op_Add_result      = reg_Add_result        ;

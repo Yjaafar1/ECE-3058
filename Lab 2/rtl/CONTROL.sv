@@ -43,10 +43,6 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 module CONTROL(
     //Inputs
-    // --flushing signals--
-    input logic ip_zero,
-    input logic ip_branch_EX,
-
     //  --from fetch--
     input logic [31:0] ip_instruction,
     
@@ -171,29 +167,15 @@ module CONTROL(
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Assign outputs
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    always @ (*) begin
-        if (ip_zero && ip_branch_EX) begin
-            assign op_RegDst   = 0   ;
-            assign op_MemtoReg = 0 ;   
-            assign op_RegWrite = 0 ;   
-            assign op_read_en  = 0  ;   
-            assign op_write_en = 0 ;   
-            assign op_branch   = 0   ;   
-            assign op_ALU_src  = 0  ;   
-            assign op_ALU_op   = 0   ;
-            end
-        else begin
-            assign op_RegDst   = reg_RegDst   ;
-            assign op_MemtoReg = reg_MemtoReg ;   
-            assign op_RegWrite = reg_RegWrite ;   
-            assign op_read_en  = reg_read_en  ;   
-            assign op_write_en = reg_write_en ;   
-            assign op_branch   = reg_branch   ;   
-            assign op_ALU_src  = reg_ALU_src  ;   
-            assign op_ALU_op   = reg_ALU_op   ;
-            end
+    assign op_RegDst   = reg_RegDst   ;
+    assign op_MemtoReg = reg_MemtoReg ;   
+    assign op_RegWrite = reg_RegWrite ;   
+    assign op_read_en  = reg_read_en  ;   
+    assign op_write_en = reg_write_en ;   
+    assign op_branch   = reg_branch   ;   
+    assign op_ALU_src  = reg_ALU_src  ;   
+    assign op_ALU_op   = reg_ALU_op   ;
 
-    end
     
         
 endmodule

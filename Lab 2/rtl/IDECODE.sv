@@ -134,7 +134,7 @@ module IDECODE(
 
     //Register block
     always @ (posedge clock) begin
-	   if(reset) begin
+	   if(reset || ip_zero && ip_branch) begin
         reg_function_opcode <= 0;
 		reg_read_data_1  <= 0;
         reg_read_data_2  <= 0;
@@ -169,30 +169,17 @@ module IDECODE(
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Assign the Outputs
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    always @(*) begin
-        if (ip_zero && ip_branch) begin
-            op_function_opcode = 0;
-            op_PC_plus_4     = 0    ;
-            op_read_data_1   = 0  ;
-            op_read_data_2   = 0  ;
-            op_immediate     = 0    ;
-            op_dest_reg_R_type = 0;
-            op_dest_reg_I_type = 0;
-            op_dec_rt 		= 0;
-	        op_dec_rs		= 0;
-            end
-        else begin
-            op_function_opcode = reg_function_opcode;
-            op_PC_plus_4     = reg_PC_plus_4    ;
-            op_read_data_1   = reg_read_data_1  ;
-            op_read_data_2   = reg_read_data_2  ;
-            op_immediate     = reg_immediate    ;
-            op_dest_reg_R_type = reg_dest_reg_R_type;
-            op_dest_reg_I_type = reg_dest_reg_I_type;
-            op_dec_rt 		= reg_dec_rt;
-	        op_dec_rs		= reg_dec_rs;
-            end
-    end
+
+    assign op_function_opcode = reg_function_opcode;
+    assign op_PC_plus_4     = reg_PC_plus_4    ;
+    assign op_read_data_1   = reg_read_data_1  ;
+    assign op_read_data_2   = reg_read_data_2  ;
+    assign op_immediate     = reg_immediate    ;
+    assign op_dest_reg_R_type = reg_dest_reg_R_type;
+    assign op_dest_reg_I_type = reg_dest_reg_I_type;
+    assign op_dec_rt 		= reg_dec_rt;
+	assign op_dec_rs		= reg_dec_rs;
+
 
     
 
