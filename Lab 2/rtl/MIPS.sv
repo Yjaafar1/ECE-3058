@@ -186,7 +186,10 @@ STALL_CONT my_STALL_CONT(
 
 CONTROL my_CONTROL(
     //Inputs
-    
+    // --flushing signals--
+    .ip_zero        (Zero       ),
+    .ip_branch_EX  (branch_EX),
+
     //  --from fetch--
     .ip_instruction (Instruction),
 
@@ -261,6 +264,10 @@ IDECODE my_IDECODE(
 	.op_dec_rt (dec_rt),
 
     //Inputs
+    // --flushing signals--
+    .ip_zero        (Zero       ),
+    .ip_branch  (branch_EX),
+
      //pass through signals
     .ip_PC_plus_4(PC_plus_4)       ,
 
@@ -288,7 +295,6 @@ FWD_CONT FWD_CONT(
 	.ip_DEC_DEST_RT(dec_rt),
 	.op_FA(op_FA),
 	.op_FB(op_FB)
-
 );
 
 

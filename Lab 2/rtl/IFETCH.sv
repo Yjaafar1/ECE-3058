@@ -76,9 +76,8 @@ localparam PARAM_RAM_addr_bits = $clog2(PARAM_RAM_length);
         instr_RAM[2] = 32'h00000000;     //   nop fill pipeline
         instr_RAM[3] = 32'b00010000001000011111111111111111; //beq $1, $1, -4
         instr_RAM[4] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
-        instr_RAM[5] = 32'h01220820;     //   add $1 $9 $2 // reg 1  0x55555557
-        instr_RAM[6] = 32'h8C080004;     //   LW $8 0x4($0) // reg 8 0xAAAAAAAA
-        instr_RAM[7] = 32'b00000000010000100001000000100000;    // add $2, $1, $2
+        //instr_RAM[5] = 32'h8C090000;     //   LW $9 0x0($0) // reg 9 0x55555555
+        instr_RAM[5] = 32'b00010000001000011111111111110000; //beq $1, $1, -4
         
 
     end 

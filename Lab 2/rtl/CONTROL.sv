@@ -43,6 +43,10 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 module CONTROL(
     //Inputs
+    // --flushing signals--
+    input logic ip_zero,
+    input logic ip_branch_EX,
+
     //  --from fetch--
     input logic [31:0] ip_instruction,
     
@@ -154,14 +158,26 @@ module CONTROL(
     
     //Register block
     always @ (posedge clock) begin
-        reg_RegDst   <= sig_RegDst   ;    
-        reg_MemtoReg <= sig_MemtoReg ;
-        reg_RegWrite <= sig_RegWrite ;
-        reg_read_en  <= sig_read_en  ;
-        reg_write_en <= sig_write_en ;
-        reg_branch   <= sig_branch   ;
-        reg_ALU_src  <= sig_ALU_src  ;
-        reg_ALU_op   <= sig_ALU_op   ;
+        if (ip_zero && ip_branch_EX) begin
+            reg_RegDst   <= 0   ;    
+            reg_MemtoReg <= 0 ;
+            reg_RegWrite <= 0 ;
+            reg_read_en  <= 0  ;
+            reg_write_en <= 0 ;
+            reg_branch   <= 0   ;
+            reg_ALU_src  <= 0  ;
+            reg_ALU_op   <= 0   ;
+        end
+        else begin
+            reg_RegDst   <= sig_RegDst   ;    
+            reg_MemtoReg <= sig_MemtoReg ;
+            reg_RegWrite <= sig_RegWrite ;
+            reg_read_en  <= sig_read_en  ;
+            reg_write_en <= sig_write_en ;
+            reg_branch   <= sig_branch   ;
+            reg_ALU_src  <= sig_ALU_src  ;
+            reg_ALU_op   <= sig_ALU_op   ;
+        end
     end
     
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

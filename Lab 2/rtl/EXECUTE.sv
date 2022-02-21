@@ -63,7 +63,6 @@ module EXECUTE (
     input logic ip_zero,
 
     //  --from decode--
-	input logic [5:0] ip_opcode,
     input logic [5:0]  ip_function_opcode ,
     input logic [9:0]  ip_PC_plus_4       ,
     input logic [31:0] ip_read_data_1     ,
