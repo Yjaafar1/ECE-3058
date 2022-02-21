@@ -186,6 +186,10 @@ STALL_CONT my_STALL_CONT(
 
 CONTROL my_CONTROL(
     //Inputs
+    // --flushing signals--
+    .ip_zero        (Zero       ),
+    .ip_branch_EX  (branch_EX),
+    
     //  --from fetch--
     .ip_instruction (Instruction),
 
