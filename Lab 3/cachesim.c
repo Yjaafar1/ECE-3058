@@ -61,7 +61,14 @@ void cachesim_init(int _block_size, int _cache_size, int _ways) {
     //      - Calculate any values you need such as number of index bits.
     //      - Allocate any data structures you need.   
     ////////////////////////////////////////////////////////////////////
+    num_sets = _cache_size / (_ways * _block_size);
+    num_index_bits = simple_log_2(num_sets);
+    num_offset_bits = simple_log_2(_block_size);
 
+    cache = (cache_set_t*)malloc(sizeof(int) + 2 * sizeof(int *));
+    cache_set_t -> size = cache_size;
+    cache_set_t -> 
+    
     ////////////////////////////////////////////////////////////////////
     //  End of your code   
     ////////////////////////////////////////////////////////////////////
@@ -88,7 +95,7 @@ void cachesim_access(addr_t physical_addr, int access_type) {
     //      - Remember to update all the necessary statistics as necessary
     //      - Remember to correctly update your valid and dirty bits.  
     ////////////////////////////////////////////////////////////////////
-
+    
     ////////////////////////////////////////////////////////////////////
     //  End of your code   
     ////////////////////////////////////////////////////////////////////
