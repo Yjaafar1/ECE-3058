@@ -2,10 +2,29 @@
 //  * @author ECE 3058 TAs
 //  */
 
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include "cachesim.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "CacheSim.h"
+
+CacheSim::CacheSim(int block_size, int cache_size, int ways) {
+    this->block_size = block_size;
+    this->cache_size = cache_size;
+    this->ways = ways;
+
+    this->num_sets = cache_size / (ways * block_size);
+    this->num_index_bits = simple_log_2(num_sets);
+    this->num_offset_bits = simple_log_2(block_size);
+
+    this->cache.resize(num_sets);
+    
+    for (int i = 0; i < num_sets; i++) {
+        cache_set_t set = cache[i];
+        set.size = ways;
+        set.blocks.resize(set.size);
+    } 
+    
+}
 
 // // Statistics you will need to keep track. DO NOT CHANGE THESE.
 // counter_t accesses = 0;     // Total number of cache accesses

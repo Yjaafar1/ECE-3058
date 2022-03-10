@@ -28,7 +28,7 @@ void assert_equal(int test_num, int expected, int actual) {
 void run_ta_tests() {
     // Initialize LRU stack
     int size = 8;
-    LruStack stack(size);
+    LruStack stack;
 
     // For testing, LRU stack is initialized with 0 as MRU and 1 as LRU.
     for (int i = (size - 1); i >= 0; i--) {
