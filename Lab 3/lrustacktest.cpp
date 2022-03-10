@@ -3,7 +3,7 @@
  */
 
 #include <stdio.h>
-#include "lrustack.h"
+#include "LruStack.h"
 
 int test_num = 1;
 
@@ -28,28 +28,28 @@ void assert_equal(int test_num, int expected, int actual) {
 void run_ta_tests() {
     // Initialize LRU stack
     int size = 8;
-    lru_stack_t* stack = init_lru_stack(size);
+    LruStack stack(size);
 
     // For testing, LRU stack is initialized with 0 as MRU and 1 as LRU.
     for (int i = (size - 1); i >= 0; i--) {
-        lru_stack_set_mru(stack, i);
+        stack.setMru(i);
     }
     
     // Test whether (size - 1) is the LRU
-    assert_equal(test_num++, size - 1, lru_stack_get_lru(stack));
+    assert_equal(test_num++, size - 1, stack.getLru());
 
     // Sequentially mark each LRU as MRU and make sure LRU rotates. 
     for (int i = (size - 1); i >= 1; i--) {
-        lru_stack_set_mru(stack, i);
-        assert_equal(test_num++, i - 1, lru_stack_get_lru(stack));
+        stack.setMru(i);
+        assert_equal(test_num++, i - 1, stack.getLru());
     }
 
     // Make sure marking anything MRU works
-    lru_stack_set_mru(stack, 4);
+    stack.setMru(4);
     for (int i = 0; i < (size - 1); i++) {
-        lru_stack_set_mru(stack, lru_stack_get_lru(stack));
+        stack.setMru(stack.getLru());
     }
-    assert_equal(test_num++, 4, lru_stack_get_lru(stack));
+    assert_equal(test_num++, 4, stack.getLru());
 }
 
 /**
