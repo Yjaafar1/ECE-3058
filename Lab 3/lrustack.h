@@ -13,7 +13,7 @@ class LruStack {
          * 
          * @param size is the size of the LRU stack to initialize. 
          */
-        LruStack();
+        LruStack() = default;
 
         /**
          * Function to get the index of the least recently used cache block, as indicated by <stack>.
@@ -31,7 +31,11 @@ class LruStack {
          */
         void setMru(int n);
 
+        // return size to determine if stack is full
+        int getSize();
+
     private:
+        int size = 0;
         list <int> priority;
 };
 

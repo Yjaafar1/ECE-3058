@@ -21,29 +21,28 @@ typedef unsigned long long counter_t;	// Data type to hold cache statistic varia
  * Struct for a cache block. Feel free to change any of this if you want. 
  */
 typedef struct cache_block_t {
-	int tag = 0;
-	int valid = 0;
-	int dirty = 0;
+	int tag;
+	int valid;
+	int dirty;
 } cache_block_t;
 
 /**
  * Struct for a cache set. Feel free to change any of this if you want. 
  */
 typedef struct cache_set_t {
-	int size = 0;				// Number of blocks in this cache set
+	int size;			// Number of blocks in this cache set
 	LruStack stack;			// LRU Stack 
-	std::vector<cache_block_t> blocks;
-	// cache_block_t* blocks;	// Array of cache block structs. You will need to
-	// 						// 	dynamically allocate based on number of blocks
-	// 						//	per set. 
+	std::vector<cache_block_t> blocks; // Array of cache block structs. You will need to
+							// 	dynamically allocate based on number of blocks
+							//	per set. 
 } cache_set_t;
 
 class CacheSim {
 	public:
-		counter_t accesses = 0;     // Total number of cache accesses
-		counter_t hits = 0;         // Total number of cache hits
-		counter_t misses = 0;       // Total number of cache misses
-		counter_t writebacks = 0;   // Total number of writebacks
+		static counter_t accesses;     // Total number of cache accesses
+		static counter_t hits;         // Total number of cache hits
+		static counter_t misses;       // Total number of cache misses
+		static counter_t writebacks;   // Total number of writebacks
 
 		/**
 		 * Function to intialize your cache simulator with the given cache parameters. 
@@ -67,12 +66,6 @@ class CacheSim {
 		 *      to reflect these values in cachesim.h so you can make your code more readable.
 		 */
 		void access(addr_t physical_add, int access_type);
-
-		/**
-		 * Function to print cache statistics
-		 * DO NOT update what this prints.
-		 */
-		void print_stats(void);
 		
 	private:		
 		int block_size;         // Block size
@@ -91,6 +84,14 @@ class CacheSim {
 				val++;
 			}
 			return val; 
+		}
+
+		addr_t create_bitmask(int x) {
+			addr_t mask = 0;
+			for (int i = 0; i < x; i++) {
+				mask = (mask << 1) + 1;
+			}
+			return mask;
 		}
 };
 
