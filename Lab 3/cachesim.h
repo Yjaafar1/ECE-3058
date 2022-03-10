@@ -42,11 +42,23 @@ class CacheSim {
 	public:
 		CacheSim(int block_size, int cache_size, int ways);
 
-		// //be extra careful with destructor
-		// ~CacheSim() {
-		// 	delete[] cache;
-		// }
+		/**
+		 * Function to perform a SINGLE memory access to your cache. In this function, 
+		 * you will need to update the required statistics (accesses, hits, misses, writebacks)
+		 * and update your cache data structure with any changes necessary.
+		 * 
+		 * @param physical_addr is the address to use for the memory access. 
+		 * @param access_type is the type of access - 0 (data read), 1 (data write) or 
+		 *      2 (instruction read). We have provided macros (MEMREAD, MEMWRITE, IFETCH)
+		 *      to reflect these values in cachesim.h so you can make your code more readable.
+		 */
+		void access(addr_t physical_add, int access_type);
 
+		/**
+		 * Function to print cache statistics
+		 * DO NOT update what this prints.
+		 */
+		void print_stats(void);
 		
 	private:
 		counter_t accesses = 0;     // Total number of cache accesses
@@ -74,13 +86,5 @@ class CacheSim {
 			return val; 
 		}
 };
-
-
-
-
-void init(int block_size, int cache_size, int ways);
-void access(addr_t physical_add, int access_type);
-//void cachesim_cleanup(void);
-void print_stats(void);
 
 #endif

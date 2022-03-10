@@ -26,6 +26,10 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
     
 }
 
+void CacheSim::access(addr_t physical_add, int access_type) {
+    
+}
+
 // // Statistics you will need to keep track. DO NOT CHANGE THESE.
 // counter_t accesses = 0;     // Total number of cache accesses
 // counter_t hits = 0;         // Total number of cache hits
