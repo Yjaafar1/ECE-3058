@@ -40,6 +40,20 @@ typedef struct cache_set_t {
 
 class CacheSim {
 	public:
+		counter_t accesses = 0;     // Total number of cache accesses
+		counter_t hits = 0;         // Total number of cache hits
+		counter_t misses = 0;       // Total number of cache misses
+		counter_t writebacks = 0;   // Total number of writebacks
+
+		/**
+		 * Function to intialize your cache simulator with the given cache parameters. 
+		 * Note that we will only input valid parameters and all the inputs will always 
+		 * be a power of 2.
+		 * 
+		 * @param _block_size is the block size in bytes
+		 * @param _cache_size is the cache size in bytes
+		 * @param _ways is the associativity
+		 */
 		CacheSim(int block_size, int cache_size, int ways);
 
 		/**
@@ -60,13 +74,7 @@ class CacheSim {
 		 */
 		void print_stats(void);
 		
-	private:
-		counter_t accesses = 0;     // Total number of cache accesses
-		counter_t hits = 0;         // Total number of cache hits
-		counter_t misses = 0;       // Total number of cache misses
-		counter_t writebacks = 0;   // Total number of writebacks
-
-		
+	private:		
 		int block_size;         // Block size
 		int cache_size;         // Cache size
 		int ways;               // Ways
@@ -75,7 +83,6 @@ class CacheSim {
 		int num_index_bits;     // Number of index bits. 
 
 		std::vector<cache_set_t> cache;
-		// cache_set_t* cache;     // Data structure for the cache
 
 		int simple_log_2(int x) {
 			int val = 0;
