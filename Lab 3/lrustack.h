@@ -35,7 +35,6 @@ class LruStack {
         int getSize();
 
     private:
-        int size = 0;
         list <int> priority;
 };
 

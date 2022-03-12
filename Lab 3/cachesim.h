@@ -68,6 +68,10 @@ class CacheSim {
 		 *      to reflect these values in cachesim.h so you can make your code more readable.
 		 */
 		void access(addr_t physical_add, int access_type);
+
+		// ~CacheSim() {
+			
+		// }
 		
 	private:		
 		int block_size;         // Block size
@@ -77,7 +81,7 @@ class CacheSim {
 		int num_offset_bits;    // Number of offset bits
 		int num_index_bits;     // Number of index bits. 
 
-		std::vector<CacheSet> cache;
+		std::vector<CacheSet*> cache;
 
 		int simple_log_2(int x) {
 			int val = 0;

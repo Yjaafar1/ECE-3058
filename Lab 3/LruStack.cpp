@@ -7,9 +7,9 @@ int LruStack::getLru() {
 void LruStack::setMru(int n) {
     priority.remove(n);
     priority.push_front(n);
-    size = priority.size();
+    //size = priority.size();
 }
 
 int LruStack::getSize() {
-    return size;
+    return priority.size();
 }
