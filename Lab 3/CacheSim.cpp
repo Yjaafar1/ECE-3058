@@ -25,8 +25,8 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
     this->cache.resize(num_sets);
     
     for (int i = 0; i < num_sets; i++) {
-        cache[i].size = ways;
-        cache[i].blocks.resize(ways);
+        cache[i].setSize(ways);
+        cache[i].resizeBlocks(ways);
     } 
     
 }
@@ -37,25 +37,24 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     addr_t index_mask = create_bitmask(num_index_bits);
     addr_t index = (physical_add >> num_offset_bits) & index_mask;
     addr_t tag = (physical_add >> (num_offset_bits + num_index_bits));
+    //printf("%d \n", tag);
+
+    //printf("%d \n", cache[index].stack.getLru());
 
     // hit or miss 
     // full or not full
     // wb or no wb
-    //printf("%d", set.size);
-    for (int i = 0; i < cache[index].size; i++) {
-        if (cache[index].blocks[i].tag == tag && cache[index].blocks[i].valid) {
+    for (int i = 0; i < cache[index].getSize(); i++) {
+        //printf("%d \n", cache[index].blocks[i].valid);
+        if (cache[index].getBlocks()[i].getTag() == tag && cache[index].getBlocks()[i].getValid()) {
+            printf("Here \n");
             CacheSim::hits++;
-            cache[index].stack.setMru(i);
+            cache[index].getStack().setMru(i);
 
             if (access_type == MEMWRITE) {
-                cache[index].blocks[i].dirty = 1;
+                cache[index].getBlocks()[i].setDirty(1);
             }
 
-            // if (set.stack.getSize() < set.size) {
-            //     set.stack.setMru(set.stack.getSize());
-            // } else {
-                
-            // }
             return;
         }
     }
@@ -64,22 +63,25 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     // also hit?
     CacheSim::misses++;
     // case if empty blocks available after miss
-    if (cache[index].stack.getSize() < cache[index].size) {
-        int emptyIndex = cache[index].stack.getSize();
+    if (cache[index].getStack().getSize() < cache[index].getSize()) {
+        int emptyIndex = cache[index].getStack().getSize();
         if (access_type == MEMWRITE) {
-            cache[index].blocks[emptyIndex].dirty = 1;
+            cache[index].getBlocks()[emptyIndex].setDirty(1);
         }
-        cache[index].blocks[emptyIndex].valid = 1;
-        cache[index].blocks[emptyIndex].tag = tag;
-        cache[index].stack.setMru(emptyIndex);
+        cache[index].getBlocks()[emptyIndex].setValid(1);
+        cache[index].getBlocks()[emptyIndex].setTag(tag);
+        cache[index].getStack().setMru(emptyIndex);
+        //printf("Here \n");
     // if no empty blocks available, replace LRU
+    // be sure to set to dirty or not dirty after
     } else {
-        int lruIndex = cache[index].stack.getLru();
-        if (cache[index].blocks[lruIndex].dirty) {
+        int lruIndex = cache[index].getStack().getLru();
+        if (cache[index].getBlocks()[lruIndex].getDirty()) {
             CacheSim::writebacks++;
         }
-        cache[index].blocks[lruIndex].tag = tag;
-        cache[index].stack.setMru(lruIndex);
+        cache[index].getBlocks()[lruIndex].setTag(tag);
+        cache[index].getStack().setMru(lruIndex);
+        printf("Here! \n");
     }
     
 }
@@ -89,7 +91,6 @@ void CacheSim::access(addr_t physical_add, int access_type) {
 		 * DO NOT update what this prints.
 		 */
 void print_stats(void) {
-    printf("Hello!");
     printf("%llu, %llu, %llu, %llu\n", CacheSim::accesses, CacheSim::hits, CacheSim::misses, CacheSim::writebacks);  
 }
 
@@ -115,7 +116,7 @@ int next_line(FILE* trace, CacheSim cache) {
         int t;
         unsigned long long address, instr;
         fscanf(trace, "%d %llx %llx\n", &t, &address, &instr);
-        printf("%d %d %d \n", t, address, instr);
+        //printf("%d %llx %llx \n", t, address, instr);
         cache.access(address, t);
         //printf("%d \n", counter++);
     }
@@ -140,7 +141,10 @@ int main(int argc, char **argv) {
 
     input = open_trace(argv[1]);
     CacheSim cache(atol(argv[2]), atol(argv[3]), atol(argv[4]));
-    while (next_line(input, cache));
+    next_line(input, cache);
+    next_line(input, cache);
+    next_line(input, cache);
+    //while (next_line(input, cache));
     print_stats();
     fclose(input);
     return 0;

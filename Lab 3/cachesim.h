@@ -10,7 +10,9 @@
 #define MEMWRITE 1
 #define IFETCH 2
 
-#include "LruStack.h"
+//#include "LruStack.h"
+//#include "CacheBlock.h"
+#include "CacheSet.h"
 #include <vector>
 
 // Please DO NOT CHANGE the following two typedefs
@@ -20,22 +22,22 @@ typedef unsigned long long counter_t;	// Data type to hold cache statistic varia
 /**
  * Struct for a cache block. Feel free to change any of this if you want. 
  */
-typedef struct cache_block_t {
-	int tag;
-	int valid;
-	int dirty;
-} cache_block_t;
+// typedef struct cache_block_t {
+// 	int tag;
+// 	int valid;
+// 	int dirty;
+// } cache_block_t;
 
 /**
  * Struct for a cache set. Feel free to change any of this if you want. 
  */
-typedef struct cache_set_t {
-	int size;			// Number of blocks in this cache set
-	LruStack stack;			// LRU Stack 
-	std::vector<cache_block_t> blocks; // Array of cache block structs. You will need to
-							// 	dynamically allocate based on number of blocks
-							//	per set. 
-} cache_set_t;
+// typedef struct cache_set_t {
+// 	int size;			// Number of blocks in this cache set
+// 	LruStack stack();			// LRU Stack 
+// 	std::vector<cache_block_t> blocks; // Array of cache block structs. You will need to
+// 							// 	dynamically allocate based on number of blocks
+// 							//	per set. 
+// } cache_set_t;
 
 class CacheSim {
 	public:
@@ -75,7 +77,7 @@ class CacheSim {
 		int num_offset_bits;    // Number of offset bits
 		int num_index_bits;     // Number of index bits. 
 
-		std::vector<cache_set_t> cache;
+		std::vector<CacheSet> cache;
 
 		int simple_log_2(int x) {
 			int val = 0;
@@ -89,7 +91,7 @@ class CacheSim {
 		addr_t create_bitmask(int x) {
 			addr_t mask = 0;
 			for (int i = 0; i < x; i++) {
-				mask = (mask << 1) + 1;
+				mask = (mask << 1) | 0b1;
 			}
 			return mask;
 		}
