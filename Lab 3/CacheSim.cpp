@@ -22,11 +22,15 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
     this->num_index_bits = simple_log_2(num_sets);
     this->num_offset_bits = simple_log_2(block_size);
 
-    this->cache.resize(num_sets);
+    //this->cache(num_sets);
     
     for (int i = 0; i < num_sets; i++) {
+        //printf("%d \n", cache[i]);
         cache.push_back(new CacheSet(ways));
+        printf("%d \n", cache[i]);
     } 
+    cache[0]->stack;
+    //printf("%d \n", cache[0]->stack->getLru());
 }
 int a;
 int d;
@@ -43,6 +47,7 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     // hit or miss 
     // full or not full
     // wb or no wb
+    printf("Here \n");
     printf("%d \n", cache[index]->size);
     printf("Here \n");
     for (int i = 0; i < cache[index]->size; i++) {
