@@ -12,8 +12,10 @@ class CacheSet {
 
         vector<CacheBlock> getBlocks() {return blocks;}
         void resizeBlocks(int size) {blocks.resize(size);}
-    private:
+
         int size;
         LruStack stack;
         std::vector<CacheBlock> blocks;
+    private:
+        
 };

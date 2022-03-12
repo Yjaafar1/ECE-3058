@@ -8,8 +8,10 @@ class CacheBlock {
         void setValid(int valid) {this->valid = valid;} 
         void setTag(int tag) {this->tag = tag;}
 
-    private:
         int tag;
         int valid;
         int dirty;
+
+    private:
+        
 };

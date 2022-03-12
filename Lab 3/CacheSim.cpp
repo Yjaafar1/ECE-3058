@@ -25,8 +25,8 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
     this->cache.resize(num_sets);
     
     for (int i = 0; i < num_sets; i++) {
-        cache[i].setSize(ways);
-        cache[i].resizeBlocks(ways);
+        cache[i].size = ways;
+        cache[i].blocks.resize(ways);
     } 
     
 }
@@ -44,15 +44,15 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     // hit or miss 
     // full or not full
     // wb or no wb
-    for (int i = 0; i < cache[index].getSize(); i++) {
+    for (int i = 0; i < cache[index].size; i++) {
         //printf("%d \n", cache[index].blocks[i].valid);
-        if (cache[index].getBlocks()[i].getTag() == tag && cache[index].getBlocks()[i].getValid()) {
+        if (cache[index].blocks[i].tag == tag && cache[index].blocks[i].valid) {
             printf("Here \n");
             CacheSim::hits++;
-            cache[index].getStack().setMru(i);
+            cache[index].stack.setMru(i);
 
             if (access_type == MEMWRITE) {
-                cache[index].getBlocks()[i].setDirty(1);
+                cache[index].blocks[i].dirty = 1;
             }
 
             return;
@@ -63,24 +63,23 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     // also hit?
     CacheSim::misses++;
     // case if empty blocks available after miss
-    if (cache[index].getStack().getSize() < cache[index].getSize()) {
-        int emptyIndex = cache[index].getStack().getSize();
+    if (cache[index].stack.getSize() < cache[index].size) {
+        int emptyIndex = cache[index].stack.getSize();
         if (access_type == MEMWRITE) {
-            cache[index].getBlocks()[emptyIndex].setDirty(1);
+            cache[index].blocks[emptyIndex].dirty = 1;
         }
-        cache[index].getBlocks()[emptyIndex].setValid(1);
-        cache[index].getBlocks()[emptyIndex].setTag(tag);
-        cache[index].getStack().setMru(emptyIndex);
+        cache[index].blocks[emptyIndex].valid = 1;
+        cache[index].blocks[emptyIndex].tag = tag;
+        cache[index].stack.setMru(emptyIndex);
         //printf("Here \n");
     // if no empty blocks available, replace LRU
-    // be sure to set to dirty or not dirty after
     } else {
-        int lruIndex = cache[index].getStack().getLru();
-        if (cache[index].getBlocks()[lruIndex].getDirty()) {
+        int lruIndex = cache[index].stack.getLru();
+        if (cache[index].blocks[lruIndex].dirty) {
             CacheSim::writebacks++;
         }
-        cache[index].getBlocks()[lruIndex].setTag(tag);
-        cache[index].getStack().setMru(lruIndex);
+        cache[index].blocks[lruIndex].tag = tag;
+        cache[index].stack.setMru(lruIndex);
         printf("Here! \n");
     }
     
