@@ -22,8 +22,6 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
     this->num_index_bits = simple_log_2(num_sets);
     this->num_offset_bits = simple_log_2(block_size);
 
-    //this->cache(num_sets);
-    
     for (int i = 0; i < num_sets; i++) {
         //printf("%d \n", cache[i]);
         cache.push_back(new CacheSet(ways));
@@ -50,9 +48,9 @@ void CacheSim::access(addr_t physical_add, int access_type) {
             CacheSim::hits++;
             cache[index]->stack->setMru(i);
 
-            // if (access_type == MEMWRITE) {
-            //     cache[index]->blocks[i]->dirty = 1;
-            // }
+            if (access_type == MEMWRITE) {
+                cache[index]->blocks[i]->dirty = 1;
+            }
 
             return;
         }
@@ -64,9 +62,9 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     // case if empty blocks available after miss
     if (cache[index]->stack->getSize() < cache[index]->size) {
         int emptyIndex = cache[index]->stack->getSize();
-        // if (access_type == MEMWRITE) {
-        //     cache[index]->blocks[emptyIndex]->dirty = 1;
-        // }
+        if (access_type == MEMWRITE) {
+            cache[index]->blocks[emptyIndex]->dirty = 1;
+        }
         cache[index]->blocks[emptyIndex]->valid = 1;
         cache[index]->blocks[emptyIndex]->tag = tag;
         cache[index]->stack->setMru(emptyIndex);
@@ -77,9 +75,11 @@ void CacheSim::access(addr_t physical_add, int access_type) {
         if (cache[index]->blocks[lruIndex]->dirty) {
             CacheSim::writebacks++;
         }
-        // if (access_type == MEMWRITE) {
-        //     cache[index]->blocks[lruIndex]->dirty = 1;
-        // }
+        if (access_type == MEMWRITE) {
+            cache[index]->blocks[lruIndex]->dirty = 1;
+        } else {
+            cache[index]->blocks[lruIndex]->dirty = 0;
+        }
         cache[index]->blocks[lruIndex]->tag = tag;
         cache[index]->stack->setMru(lruIndex);
     }
