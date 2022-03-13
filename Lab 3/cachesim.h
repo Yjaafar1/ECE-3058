@@ -19,26 +19,6 @@
 typedef unsigned long long addr_t;		// Data type to hold addresses
 typedef unsigned long long counter_t;	// Data type to hold cache statistic variables
 
-/**
- * Struct for a cache block. Feel free to change any of this if you want. 
- */
-// typedef struct cache_block_t {
-// 	int tag;
-// 	int valid;
-// 	int dirty;
-// } cache_block_t;
-
-/**
- * Struct for a cache set. Feel free to change any of this if you want. 
- */
-// typedef struct cache_set_t {
-// 	int size;			// Number of blocks in this cache set
-// 	LruStack stack();			// LRU Stack 
-// 	std::vector<cache_block_t> blocks; // Array of cache block structs. You will need to
-// 							// 	dynamically allocate based on number of blocks
-// 							//	per set. 
-// } cache_set_t;
-
 class CacheSim {
 	public:
 		static counter_t accesses;     // Total number of cache accesses
@@ -68,10 +48,6 @@ class CacheSim {
 		 *      to reflect these values in cachesim.h so you can make your code more readable.
 		 */
 		void access(addr_t physical_add, int access_type);
-
-		// ~CacheSim() {
-			
-		// }
 		
 	private:		
 		int block_size;         // Block size
