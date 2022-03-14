@@ -1,3 +1,6 @@
+#ifndef __CACHESET_H
+#define __CACHESET_H
+
 #include "LruStack.h"
 #include "CacheBlock.h"
 #include <vector>
@@ -27,3 +30,5 @@ class CacheSet {
     private:
         
 };
+
+#endif

@@ -8,7 +8,12 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"${file}",
+				"CacheSim.cpp",
+				"DCache.cpp",
+				"DCache.h",
+				"ICache.cpp",
+				"L2Cache.cpp",
+				"LruStack.cpp",
 				"-o",
 				"${fileDirname}\\${fileBasenameNoExtension}.exe"
 			],

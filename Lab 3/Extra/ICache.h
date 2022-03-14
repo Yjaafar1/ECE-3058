@@ -36,6 +36,10 @@ class ICache {
 		static counter_t misses;       // Total number of cache misses
 		static counter_t writebacks;   // Total number of writebacks
 
+		void print_stats(void) {
+   	 		printf("%llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
+		}
+
     private:
         
         int simple_log_2(int x) {

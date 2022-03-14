@@ -1,3 +1,6 @@
+#ifndef __CACHEBLOCK_H
+#define __CACHEBLOCK_H
+
 class CacheBlock {
     public:
         int getTag() {return tag;}
@@ -15,3 +18,6 @@ class CacheBlock {
     private:
         
 };
+
+
+#endif
