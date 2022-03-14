@@ -27,8 +27,6 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
         cache.push_back(new CacheSet(ways));
         //printf("%d \n", cache[i]);
     } 
-    cache[0]->stack;
-    //printf("%d \n", cache[0]->stack->getLru());
 }
 
 // access type determines dirty bit?
