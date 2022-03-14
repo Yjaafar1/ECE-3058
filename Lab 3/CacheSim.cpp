@@ -23,15 +23,10 @@ CacheSim::CacheSim(int block_size, int cache_size, int ways) {
     this->num_offset_bits = simple_log_2(block_size);
 
     for (int i = 0; i < num_sets; i++) {
-        //printf("%d \n", cache[i]);
         cache.push_back(new CacheSet(ways));
-        //printf("%d \n", cache[i]);
     } 
-    cache[0]->stack;
-    //printf("%d \n", cache[0]->stack->getLru());
 }
 
-// access type determines dirty bit?
 void CacheSim::access(addr_t physical_add, int access_type) {
 
     CacheSim::accesses++;
@@ -39,11 +34,9 @@ void CacheSim::access(addr_t physical_add, int access_type) {
     addr_t index = (physical_add >> num_offset_bits) & index_mask;
     addr_t tag = (physical_add >> (num_offset_bits + num_index_bits));
     
-    // hit or miss 
-    // full or not full
-    // wb or no wb
+    // check at target index for valid block and matching tag
+    // if hit, set flags as needed and set MRU
     for (int i = 0; i < cache[index]->size; i++) {
-        //printf("%d \n", cache[index].blocks[i].valid);
         if (cache[index]->blocks[i]->tag == tag && cache[index]->blocks[i]->valid) {
             CacheSim::hits++;
             cache[index]->stack->setMru(i);
@@ -56,10 +49,10 @@ void CacheSim::access(addr_t physical_add, int access_type) {
         }
     }
     
-    //do something for miss
-    // also hit?
+    // if miss, check if empty block available at index
+    // write to this empty box if available 
+    // set relevant flags and MRU
     CacheSim::misses++;
-    // case if empty blocks available after miss
     if (cache[index]->stack->getSize() < cache[index]->size) {
         int emptyIndex = cache[index]->stack->getSize();
         if (access_type == MEMWRITE) {
@@ -69,7 +62,8 @@ void CacheSim::access(addr_t physical_add, int access_type) {
         cache[index]->blocks[emptyIndex]->tag = tag;
         cache[index]->stack->setMru(emptyIndex);
     // if no empty blocks available, replace LRU
-    // more dirty bit stuff
+    // increment writebacks if block dirty
+    // set MRU and new block flags
     } else {
         int lruIndex = cache[index]->stack->getLru();
         if (cache[index]->blocks[lruIndex]->dirty) {
@@ -116,9 +110,7 @@ int next_line(FILE* trace, CacheSim cache) {
         int t;
         unsigned long long address, instr;
         fscanf(trace, "%d %llx %llx\n", &t, &address, &instr);
-        //printf("%d %llx %llx \n", t, address, instr);
         cache.access(address, t);
-        //printf("%d \n", counter++);
     }
     return 1;
 }
@@ -141,9 +133,6 @@ int main(int argc, char **argv) {
 
     input = open_trace(argv[1]);
     CacheSim cache(atol(argv[2]), atol(argv[3]), atol(argv[4]));
-    // next_line(input, cache);
-    // next_line(input, cache);
-    // next_line(input, cache);
     while (next_line(input, cache));
     print_stats();
     fclose(input);

@@ -49,7 +49,12 @@ void ICache::access(addr_t physical_add) {
         cache[back_index]->blocks[0]->valid = 0;
     }
 
-    if (cache[back_index]->blocks[0]->valid == 0)
+    //Two scenarios for placing data in cache
+
+    //1) block empty or invalidated, free to replace
+    if (cache[index]->blocks[0]->valid == 0) {
+
+    }
     cache[index]->
 
     
