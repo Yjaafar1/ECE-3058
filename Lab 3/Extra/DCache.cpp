@@ -26,9 +26,9 @@ void DCache::access(addr_t physical_add, int access_type) {
     addr_t index_mask = create_bitmask(num_index_bits);
     addr_t index = (physical_add >> num_offset_bits) & index_mask;
     addr_t tag = (physical_add >> (num_offset_bits + num_index_bits));
-    printf("index: %s, tag %s", index, tag);
+
     if (DEBUG == 1) {
-        printf("index: %s, tag %s", index, tag);
+        printf("Data: index: %llo, tag %llo\n", index, tag);
     }
 
     //if hit, increment hits and return
@@ -41,13 +41,18 @@ void DCache::access(addr_t physical_add, int access_type) {
     //increment misses
     DCache::misses++;
 
-    access_L2(physical_add, access_type, index_mask);
-
     //if overwritten block is valid and dirty, access L2 Cache to update 
     if (cache[index]->blocks[0]->dirty && cache[index]->blocks[0]->valid) {
         addr_t override_addr = (cache[index]->blocks[0]->tag) << (num_offset_bits + num_index_bits) | (index << num_offset_bits);
         access_L2(override_addr, MEMWRITE, index_mask);
     }
+
+    //can this be a mem_write?
+    //what if you need to pull from mem into both L1 and L2? Do you have 
+    //the L2 block as dirty?
+    //I think this should always just not set it dirty
+    access_L2(physical_add, 0, index_mask);
+    //access_L2(physical_add, access_type, index_mask);
 
     // override old block whether data is from mem or L2 Cache
     cache[index]->blocks[0]->valid = 1;

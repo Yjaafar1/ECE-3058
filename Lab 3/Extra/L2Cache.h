@@ -52,7 +52,15 @@ class L2Cache {
 		addr_t access(addr_t physical_add, int access_type);
 
 		void print_stats(void) {
-   	 		printf("%llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
+   	 		printf("L2: %llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
+		}
+
+		void print_miss_rate(void) {
+			printf("L2: %f\n", ((double)misses)/accesses);
+		}
+
+		void print_writebacks(void) {
+			printf("L2: %d\n", writebacks);
 		}
 		
 	private:		

@@ -1,8 +1,4 @@
 #include "ICache.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #define DEBUG 1
 counter_t  ICache::accesses = 0;     // Total number of cache accesses
 counter_t  ICache::hits = 0;         // Total number of cache hits
@@ -22,8 +18,6 @@ ICache::ICache(int block_size, int cache_size, L2Cache* l2Cache) {
         //cache set maintains LRU, I just don't have to use it
         cache.push_back(new CacheSet(1));
     } 
-    printf("Here!!");
-
     //double check all correct relative to direct map
 }
 
@@ -35,8 +29,8 @@ void ICache::access(addr_t physical_add) {
     addr_t index = (physical_add >> num_offset_bits) & index_mask;
     addr_t tag = (physical_add >> (num_offset_bits + num_index_bits));
 
-    if (DEBUG) {
-        printf("index: %llx, tag %llx\n", index, tag);
+    if (DEBUG == 1) {
+        printf("Instr: index: %llo, tag %llo\n", index, tag);
     }
 
     //No dirty bits with Instruction Cache

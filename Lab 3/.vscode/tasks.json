@@ -15,7 +15,7 @@
 				"L2Cache.cpp",
 				"LruStack.cpp",
 				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+				"CacheSim.exe"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

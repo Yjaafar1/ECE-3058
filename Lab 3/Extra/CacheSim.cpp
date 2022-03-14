@@ -28,9 +28,19 @@ counter_t  DCache::writebacks = 0;   // Total number of writebacks
 		 */
 void print_stats(L2Cache* l2_cache, ICache* i_cache, DCache* d_cache) {
     //accesses, hits, misses, wbs
+    printf("\nAccesses, Hits, Misses, WBs\n");
     i_cache->print_stats();
     d_cache->print_stats();
     l2_cache->print_stats();
+    printf("\nMiss Rates\n");
+    i_cache->print_miss_rate();
+    d_cache->print_miss_rate();
+    l2_cache->print_miss_rate();
+    printf("\nWriteBacks\n");
+    i_cache->print_writebacks();
+    d_cache->print_writebacks();
+    l2_cache->print_writebacks();
+
 }
 
 /**
@@ -57,9 +67,11 @@ int next_line(FILE* trace, ICache* i_cache, DCache* d_cache) {
         fscanf(trace, "%d %llx %llx\n", &t, &address, &instr);
         if (t == IFETCH) {
             i_cache->access(address);
+            //i_cache->print_last();
         } else {
             d_cache->access(address, t);
         }
+        
     }
     return 1;
 }

@@ -37,8 +37,20 @@ class ICache {
 		static counter_t writebacks;   // Total number of writebacks
 
 		void print_stats(void) {
-   	 		printf("%llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
+   	 		printf("Instr: %llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
 		}
+
+		void print_miss_rate(void) {
+			printf("Instr: %f\n", ((double)misses)/accesses);
+		}
+
+		void print_writebacks(void) {
+			printf("Instr: %d\n", writebacks);
+		}
+
+		// void print_last(void) {
+   	 	// 	printf("%d, %d\n",  last_index,  last_tag);  
+		// }
 
     private:
         
@@ -60,7 +72,7 @@ class ICache {
 		}
 
         //int writebacks;
-        
+
         int block_size;         // Block size
 		int cache_size;         // Cache size
 		int num_sets;           // Number of sets

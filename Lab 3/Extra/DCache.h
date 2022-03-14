@@ -39,7 +39,15 @@ class DCache {
 		static counter_t writebacks;   // Total number of writebacks
 
 		void print_stats(void) {
-   	 		printf("%llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
+   	 		printf("Data: %llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
+		}
+
+		void print_miss_rate(void) {
+			printf("Data: %f\n", ((double)misses)/accesses);
+		}
+
+		void print_writebacks(void) {
+			printf("Data: %d\n", writebacks);
 		}
 
     private:
@@ -62,8 +70,8 @@ class DCache {
 		}
 
         void access_L2(addr_t physical_add, int access_type, int index_mask) {
-            //missed, so access L2 cache for data (instruction)
-            addr_t back_invalid = this->l2Cache->access(physical_add, IFETCH);
+            //missed, so access L2 cache for data
+            addr_t back_invalid = this->l2Cache->access(physical_add, access_type);
 
             //if back-invalidate required, compute index and tag
             //and invalidate block, increment writebacks if block dirty

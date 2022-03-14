@@ -1,10 +1,6 @@
 // /**
 //  * @author ECE 3058 TAs
 //  */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "L2Cache.h"
 
 #define DEBUG 1
@@ -37,8 +33,8 @@ addr_t L2Cache::access(addr_t physical_add, int access_type) {
     addr_t index = (physical_add >> num_offset_bits) & index_mask;
     addr_t tag = (physical_add >> (num_offset_bits + num_index_bits));
 
-    if (DEBUG) {
-        printf("index: %s, tag %s", index, tag);
+    if (DEBUG == 1) {
+        printf("L2: index: %llo, tag %llo\n", index, tag);
     }
     
     // hit or miss 
@@ -48,8 +44,8 @@ addr_t L2Cache::access(addr_t physical_add, int access_type) {
         if (cache[index]->blocks[i]->tag == tag && cache[index]->blocks[i]->valid) {
             L2Cache::hits++;
             cache[index]->stack->setMru(i);
-
             if (access_type == MEMWRITE) {
+                //printf("\nHELLO\n");
                 cache[index]->blocks[i]->dirty = 1;
             }
 
@@ -73,6 +69,7 @@ addr_t L2Cache::access(addr_t physical_add, int access_type) {
     // more dirty bit stuff
     } else {
         int lruIndex = cache[index]->stack->getLru();
+        printf("%d\n", cache[index]->blocks[1]->dirty);
         if (cache[index]->blocks[lruIndex]->dirty) {
             L2Cache::writebacks++;
         }
