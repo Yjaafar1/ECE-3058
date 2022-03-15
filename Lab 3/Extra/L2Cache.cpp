@@ -9,6 +9,7 @@ counter_t L2Cache::accesses = 0;     // Total number of cache accesses
 counter_t L2Cache::hits = 0;         // Total number of cache hits
 counter_t L2Cache::misses = 0;       // Total number of cache misses
 counter_t L2Cache::writebacks = 0;   // Total number of writebacks
+counter_t L2Cache::traffic = 0;
 
 
 L2Cache::L2Cache(int block_size, int cache_size, int ways) {
@@ -45,10 +46,13 @@ addr_t L2Cache::access(addr_t physical_add, int access_type) {
             L2Cache::hits++;
             cache[index]->stack->setMru(i);
             if (access_type == MEMWRITE) {
-                //printf("\nHELLO\n");
                 cache[index]->blocks[i]->dirty = 1;
+            } else {
+                //traffic = L1 miss, but L2 hit
+                //sim does not set dirty bit as high when just bringing data from L2 to L1
+                printf("-- L2 hit, L1 miss\n");
+                L2Cache::traffic++;
             }
-
             return 0;
         }
     }
@@ -69,7 +73,6 @@ addr_t L2Cache::access(addr_t physical_add, int access_type) {
     // more dirty bit stuff
     } else {
         int lruIndex = cache[index]->stack->getLru();
-        printf("%d\n", cache[index]->blocks[1]->dirty);
         if (cache[index]->blocks[lruIndex]->dirty) {
             L2Cache::writebacks++;
         }
@@ -80,6 +83,9 @@ addr_t L2Cache::access(addr_t physical_add, int access_type) {
         }
         cache[index]->blocks[lruIndex]->tag = tag;
         cache[index]->stack->setMru(lruIndex);
+        //traffic = sending back invalidation
+        printf("-- Back Invalidation\n");
+        L2Cache::traffic++;
         return (cache[index]->blocks[0]->tag) << (num_offset_bits + num_index_bits) | (index << num_offset_bits);
     }
     return 0;

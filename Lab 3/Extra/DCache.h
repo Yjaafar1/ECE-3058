@@ -37,6 +37,7 @@ class DCache {
 		static counter_t hits;         // Total number of cache hits
 		static counter_t misses;       // Total number of cache misses
 		static counter_t writebacks;   // Total number of writebacks
+		static counter_t traffic;   // Total number of writebacks
 
 		void print_stats(void) {
    	 		printf("Data: %llu, %llu, %llu, %llu\n",  accesses,  hits,  misses,  writebacks);  
@@ -46,8 +47,16 @@ class DCache {
 			printf("Data: %f\n", ((double)misses)/accesses);
 		}
 
+		void print_miss_rate_global(counter_t global) {
+			printf("Data: %f\n", ((double)misses)/global);
+		}
+
 		void print_writebacks(void) {
 			printf("Data: %d\n", writebacks);
+		}
+
+		counter_t get_traffic() {
+			return traffic;
 		}
 
     private:

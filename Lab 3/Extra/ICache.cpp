@@ -4,6 +4,7 @@ counter_t  ICache::accesses = 0;     // Total number of cache accesses
 counter_t  ICache::hits = 0;         // Total number of cache hits
 counter_t  ICache::misses = 0;       // Total number of cache misses
 counter_t  ICache::writebacks = 0;   // Total number of writebacks
+counter_t  ICache::traffic = 0;   // Total number of writebacks
 
 ICache::ICache(int block_size, int cache_size, L2Cache* l2Cache) {
     this->block_size = block_size;
@@ -53,9 +54,6 @@ void ICache::access(addr_t physical_add) {
         addr_t back_index = (back_invalid >> num_offset_bits) & index_mask;
         addr_t back_tag = (back_invalid >> (num_offset_bits + num_index_bits));
         cache[back_index]->blocks[0]->valid = 0;
-        // if (cache[back_index]->blocks[0]->dirty) {
-        //     ICache::writebacks++;
-        // }
     }
 
     // assume dirty bit never encountered for instruction cache

@@ -5,10 +5,6 @@
 #include "DCache.h"
 #include "L2Cache.h"
 
-// static counter_t accesses;     // Total number of cache accesses
-// static counter_t hits;         // Total number of cache hits
-// static counter_t misses;       // Total number of cache misses
-// static counter_t writebacks;   // Total number of writebacks
 
 #define CACHE_SIZE_DEF 16384
 #define BLOCK_SIZE_DEF 64
@@ -17,10 +13,7 @@
 #define CACHE_SIZE_2_DEF 262144
 #define BLOCK_SIZE_2_DEF 64
 
-counter_t  DCache::accesses = 0;     // Total number of cache accesses
-counter_t  DCache::hits = 0;         // Total number of cache hits
-counter_t  DCache::misses = 0;       // Total number of cache misses
-counter_t  DCache::writebacks = 0;   // Total number of writebacks
+counter_t  global = 0;
 
 /**
 		 * Function to print cache statistics
@@ -33,9 +26,15 @@ void print_stats(L2Cache* l2_cache, ICache* i_cache, DCache* d_cache) {
     d_cache->print_stats();
     l2_cache->print_stats();
     printf("\nMiss Rates\n");
+    printf("Local: \n");
     i_cache->print_miss_rate();
     d_cache->print_miss_rate();
     l2_cache->print_miss_rate();
+    printf("\nGlobal: \n");
+    i_cache->print_miss_rate_global(global);
+    d_cache->print_miss_rate_global(global);
+    l2_cache->print_miss_rate_global(global);
+    printf("\nTraffic: %d \n", d_cache->get_traffic() + l2_cache->get_traffic());
     printf("\nWriteBacks\n");
     i_cache->print_writebacks();
     d_cache->print_writebacks();
@@ -51,7 +50,6 @@ FILE *open_trace(const char *filename) {
     return fopen(filename, "r");
 }
 
-int counter = 0;
 
 /**
  * Read in next line of the trace
@@ -62,12 +60,13 @@ int counter = 0;
 int next_line(FILE* trace, ICache* i_cache, DCache* d_cache) {
     if (feof(trace) || ferror(trace)) return 0;
     else {
+        global++;
         int t;
         unsigned long long address, instr;
         fscanf(trace, "%d %llx %llx\n", &t, &address, &instr);
+        printf("\nAccess %d: \n", global);
         if (t == IFETCH) {
             i_cache->access(address);
-            //i_cache->print_last();
         } else {
             d_cache->access(address, t);
         }

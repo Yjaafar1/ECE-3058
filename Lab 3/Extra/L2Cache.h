@@ -27,6 +27,7 @@ class L2Cache {
 		static counter_t hits;         // Total number of cache hits
 		static counter_t misses;       // Total number of cache misses
 		static counter_t writebacks;   // Total number of writebacks
+		static counter_t traffic;
 
 		/**
 		 * Function to intialize your cache simulator with the given cache parameters. 
@@ -59,8 +60,16 @@ class L2Cache {
 			printf("L2: %f\n", ((double)misses)/accesses);
 		}
 
+		void print_miss_rate_global(counter_t global) {
+			printf("L2: %f\n", ((double)misses)/global);
+		}
+
 		void print_writebacks(void) {
 			printf("L2: %d\n", writebacks);
+		}
+
+		counter_t get_traffic() {
+			return traffic;
 		}
 		
 	private:		

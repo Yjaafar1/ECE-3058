@@ -2,6 +2,12 @@
 
 #define DEBUG 1
 
+counter_t  DCache::accesses = 0;     // Total number of cache accesses
+counter_t  DCache::hits = 0;         // Total number of cache hits
+counter_t  DCache::misses = 0;       // Total number of cache misses
+counter_t  DCache::writebacks = 0;   // Total number of writebacks
+counter_t  DCache::traffic = 0;
+
 DCache::DCache(int block_size, int cache_size, L2Cache* l2Cache) {
     this->block_size = block_size;
     this->cache_size = cache_size;
@@ -44,6 +50,9 @@ void DCache::access(addr_t physical_add, int access_type) {
     //if overwritten block is valid and dirty, access L2 Cache to update 
     if (cache[index]->blocks[0]->dirty && cache[index]->blocks[0]->valid) {
         addr_t override_addr = (cache[index]->blocks[0]->tag) << (num_offset_bits + num_index_bits) | (index << num_offset_bits);
+        //traffic = dirty line evicted from L1 and sent to L2
+        printf("-- Evict dirty line\n");
+        DCache::traffic++;
         access_L2(override_addr, MEMWRITE, index_mask);
     }
 
@@ -52,7 +61,6 @@ void DCache::access(addr_t physical_add, int access_type) {
     //the L2 block as dirty?
     //I think this should always just not set it dirty
     access_L2(physical_add, 0, index_mask);
-    //access_L2(physical_add, access_type, index_mask);
 
     // override old block whether data is from mem or L2 Cache
     cache[index]->blocks[0]->valid = 1;
