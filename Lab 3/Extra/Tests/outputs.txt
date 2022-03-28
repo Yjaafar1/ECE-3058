@@ -1,0 +1,8 @@
+Basic - basic test:
+Run with way = 1
+
+Back - back invalidate a SW: Run with way = 1
+
+Evict - evict SW from L1 to L2: Run with way = 2
+
+Evict WB - evict SW from L1 to L2 then evict from L2: Run with way = 2
