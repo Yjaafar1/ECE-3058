@@ -142,12 +142,17 @@ uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
     /* Split the address and find the page table entry */
     vpn_t virtual_address = vaddr_vpn(address);
     uint16_t offset = vaddr_offset(address);
+    pte_t *pgtable = (pte_t *) (mem + (PTBR * PAGE_SIZE));
 
     /* If an entry is invalid, just page fault to allocate a page for the page table. */
-
+    if (!pgtable[virtual_address].valid) {
+        page_fault(address);
+    }
 
     /* Set the "referenced" bit to reduce the page's likelihood of eviction */
+    pfn_t physical_frame_num = pgtable[virtual_address].pfn;
 
+    frame_table[physical_frame_num].referenced = 1;
 
     /*
         The physical address will be constructed like this:
@@ -160,14 +165,16 @@ uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
         Create the physical address using your offset and the page
         table entry.
     */
-
+    paddr_t physical_address = (physical_frame_num << OFFSET_LEN) + offset;
 
     /* Either read or write the data to the physical address
        depending on 'rw' */
+    fte_t *frame_table_entry = (fte_t *) (mem + physical_address);
     if (rw == 'r') {
-
+        stats.reads++;
     } else {
-
+        stats.writes++;
+        pgtable[virtual_address].dirty = 1;
     }
 }
 
