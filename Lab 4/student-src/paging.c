@@ -37,7 +37,16 @@ void system_init(void) {
      * frames in memory. The frame table will be useful later if we need to
      * evict pages during page faults.
      */
+    frame_table = (fte_t*) malloc(NUM_FRAMES * sizeof(frame_table));
 
+
+    for (int i = 0; i < NUM_FRAMES; i++) {
+        frame_table[i].protected = 0;
+        frame_table[i].mapped = 0;
+        frame_table[i].referenced = 0;
+        frame_table[i].process = NULL;
+        frame_table[i].vpn = 0;
+    }
 
     /*
      * 2. Mark the first frame table entry as protected.
@@ -46,7 +55,7 @@ void system_init(void) {
      * however, there are some frames we never want to evict.
      * We mark these special pages as "protected" to indicate this.
      */
-
+    frame_table[0].protected = 1;
 }
 
 /*  --------------------------------- PROBLEM 3 --------------------------------------
@@ -68,8 +77,12 @@ void proc_init(pcb_t *proc) {
      * 1. Call the free frame allocator (free_frame) to return a free frame for
      * this process's page table. You should zero-out the memory.
      */
-
-
+    pfn_t freed = free_frame();
+    frame_table[freed].protected = 1;
+    frame_table[freed].mapped = 0;
+    frame_table[freed].referenced = 0;
+    frame_table[freed].process = NULL;
+    frame_table[freed].vpn = 0;
     /*
      * 2. Update the process's PCB with the frame number
      * of the newly allocated page table.
@@ -77,7 +90,7 @@ void proc_init(pcb_t *proc) {
      * Additionally, mark the frame's frame table entry as protected. You do not
      * want your page table to be accidentally evicted.
      */
-
+    proc->saved_ptbr = freed;
 }
 
 /*  --------------------------------- PROBLEM 4 --------------------------------------
@@ -92,7 +105,8 @@ void proc_init(pcb_t *proc) {
     -----------------------------------------------------------------------------------
  */
 void context_switch(pcb_t *proc) {
-
+    current_process = proc;
+    PTBR = current_process->saved_ptbr;
 }
 
 /*  --------------------------------- PROBLEM 5 --------------------------------------
@@ -125,10 +139,9 @@ void context_switch(pcb_t *proc) {
     -----------------------------------------------------------------------------------
  */
 uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
-
-
     /* Split the address and find the page table entry */
-
+    vpn_t virtual_address = vaddr_vpn(address);
+    uint16_t offset = vaddr_offset(address);
 
     /* If an entry is invalid, just page fault to allocate a page for the page table. */
 
