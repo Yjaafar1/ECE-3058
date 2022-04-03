@@ -37,7 +37,7 @@ void system_init(void) {
      * frames in memory. The frame table will be useful later if we need to
      * evict pages during page faults.
      */
-    frame_table = (fte_t*) malloc(NUM_FRAMES * sizeof(frame_table));
+    frame_table = (fte_t*) (mem);
 
 
     for (int i = 0; i < NUM_FRAMES; i++) {
@@ -83,6 +83,7 @@ void proc_init(pcb_t *proc) {
     frame_table[freed].referenced = 0;
     frame_table[freed].process = NULL;
     frame_table[freed].vpn = 0;
+    memset(mem + (freed << OFFSET_LEN), 0, PAGE_SIZE);
     /*
      * 2. Update the process's PCB with the frame number
      * of the newly allocated page table.
@@ -139,6 +140,7 @@ void context_switch(pcb_t *proc) {
     -----------------------------------------------------------------------------------
  */
 uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
+    stats.accesses++;
     /* Split the address and find the page table entry */
     vpn_t virtual_address = vaddr_vpn(address);
     uint16_t offset = vaddr_offset(address);
@@ -197,7 +199,7 @@ void proc_cleanup(pcb_t *proc) {
     /* Iterate the page table and clean up each valid page */
     for (size_t i = 0; i < NUM_PAGES; i++) {
         frame_table[pgtable[i].pfn].mapped = 0;
-        if (pgtable[i].swap) {
+        if (swap_exists(&pgtable[i])) {
             swap_free(&pgtable[i]);
         }
     }

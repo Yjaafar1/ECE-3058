@@ -37,16 +37,18 @@ pfn_t free_frame(void) {
      */
 
     if (frame_table[victim_pfn].mapped) {
-        pte_t *pgtable = (pte_t *) (mem + (frame_table[victim_pfn].process->saved_ptbr * PAGE_SIZE));
+        pte_t *pgtable = (pte_t *) (mem + (frame_table[victim_pfn].process->saved_ptbr << OFFSET_LEN));
         vpn_t vpn = frame_table[victim_pfn].vpn;
-        paddr_t physical_address = mem + (pgtable[vpn].pfn << OFFSET_LEN);
+        uint8_t* physical_address = mem + (victim_pfn << OFFSET_LEN);
         if (pgtable[vpn].dirty) {
             swap_write(&pgtable[vpn], physical_address);
+            stats.writebacks++;
         }
+        pgtable[vpn].dirty = 0;
         pgtable[vpn].valid = 0;
     }
     /* If the victim is in use, we must evict it first */
-
+    
 
     /* Return the pfn */
     return victim_pfn;

@@ -25,9 +25,9 @@
     ----------------------------------------------------------------------------------
  */
 void page_fault(vaddr_t address) {
+  stats.page_faults++;
   /* First, split the faulting address and locate the page table entry */
   vpn_t vpn = vaddr_vpn(address);
-  uint16_t offset = vaddr_offset(address);
   pte_t *pgtable = (pte_t *) (mem + (PTBR * PAGE_SIZE));
 
   /* It's a page fault, so the entry obviously won't be valid. Grab
@@ -56,11 +56,10 @@ void page_fault(vaddr_t address) {
     * Otherwise, zero the page's memory. If the page is later written
     * back, swap_write() will automatically allocate a swap entry.
     */
-
-  paddr_t physical_address = mem + (pgtable[vpn].pfn << OFFSET_LEN);
-  if (!pgtable[vpn].swap) {
-    swap_read(&pgtable[vpn], physical_address);
+  uint8_t* frame_address = mem + (pgtable[vpn].pfn << OFFSET_LEN);
+  if (swap_exists(&pgtable[vpn])) {
+    swap_read(&pgtable[vpn], frame_address);
   } else {
-    memcpy(physical_address, 0, PAGE_SIZE);
+    memset(frame_address, 0, PAGE_SIZE);
   }
 }
