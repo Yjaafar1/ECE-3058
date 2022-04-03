@@ -36,6 +36,15 @@ pfn_t free_frame(void) {
      * 3) Mark the original page table entry as invalid
      */
 
+    if (frame_table[victim_pfn].mapped) {
+        pte_t *pgtable = (pte_t *) (mem + (frame_table[victim_pfn].process->saved_ptbr * PAGE_SIZE));
+        vpn_t vpn = frame_table[victim_pfn].vpn;
+        paddr_t physical_address = mem + (pgtable[vpn].pfn << OFFSET_LEN);
+        if (pgtable[vpn].dirty) {
+            swap_write(&pgtable[vpn], physical_address);
+        }
+        pgtable[vpn].valid = 0;
+    }
     /* If the victim is in use, we must evict it first */
 
 

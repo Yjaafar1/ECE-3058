@@ -166,15 +166,16 @@ uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
         table entry.
     */
     paddr_t physical_address = (physical_frame_num << OFFSET_LEN) + offset;
-
     /* Either read or write the data to the physical address
        depending on 'rw' */
-    fte_t *frame_table_entry = (fte_t *) (mem + physical_address);
     if (rw == 'r') {
         stats.reads++;
+        return *(mem + physical_address);
     } else {
+        *(mem + physical_address) = data;
         stats.writes++;
         pgtable[virtual_address].dirty = 1;
+        return data;
     }
 }
 
@@ -192,12 +193,15 @@ uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
 */
 void proc_cleanup(pcb_t *proc) {
     /* Look up the process's page table */
-
+    pte_t *pgtable = (pte_t *) (mem + (proc->saved_ptbr * PAGE_SIZE));
     /* Iterate the page table and clean up each valid page */
     for (size_t i = 0; i < NUM_PAGES; i++) {
-
+        frame_table[pgtable[i].pfn].mapped = 0;
+        if (pgtable[i].swap) {
+            swap_free(&pgtable[i]);
+        }
     }
 
     /* Free the page table itself in the frame table */
-
+    frame_table[proc->saved_ptbr].protected = 0;
 }
