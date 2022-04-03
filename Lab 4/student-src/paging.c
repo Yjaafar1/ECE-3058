@@ -142,17 +142,17 @@ void context_switch(pcb_t *proc) {
 uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
     stats.accesses++;
     /* Split the address and find the page table entry */
-    vpn_t virtual_address = vaddr_vpn(address);
+    vpn_t vpn = vaddr_vpn(address);
     uint16_t offset = vaddr_offset(address);
-    pte_t *pgtable = (pte_t *) (mem + (PTBR * PAGE_SIZE));
+    pte_t *pgtable = (pte_t *) (mem + (PTBR << OFFSET_LEN));
 
     /* If an entry is invalid, just page fault to allocate a page for the page table. */
-    if (!pgtable[virtual_address].valid) {
+    if (!pgtable[vpn].valid) {
         page_fault(address);
     }
 
     /* Set the "referenced" bit to reduce the page's likelihood of eviction */
-    pfn_t physical_frame_num = pgtable[virtual_address].pfn;
+    pfn_t physical_frame_num = pgtable[vpn].pfn;
 
     frame_table[physical_frame_num].referenced = 1;
 
@@ -176,7 +176,7 @@ uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
     } else {
         *(mem + physical_address) = data;
         stats.writes++;
-        pgtable[virtual_address].dirty = 1;
+        pgtable[vpn].dirty = 1;
         return data;
     }
 }
@@ -195,10 +195,13 @@ uint8_t mem_access(vaddr_t address, char rw, uint8_t data) {
 */
 void proc_cleanup(pcb_t *proc) {
     /* Look up the process's page table */
-    pte_t *pgtable = (pte_t *) (mem + (proc->saved_ptbr * PAGE_SIZE));
+    pte_t *pgtable = (pte_t *) (mem + (proc->saved_ptbr << OFFSET_LEN));
     /* Iterate the page table and clean up each valid page */
     for (size_t i = 0; i < NUM_PAGES; i++) {
-        frame_table[pgtable[i].pfn].mapped = 0;
+        if (pgtable[i].valid) {
+            frame_table[pgtable[i].pfn].mapped = 0;
+        }
+        
         if (swap_exists(&pgtable[i])) {
             swap_free(&pgtable[i]);
         }
