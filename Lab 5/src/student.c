@@ -32,34 +32,23 @@ extern void wake_up(pcb_t *process);
 static pcb_t **current;
 static pthread_mutex_t current_mutex;
 
-
-//These all need to be init right?
-static pthread_mutex_t ready_mutex;
-
-static pthread_cond_t cond_NE;
-static pthread_mutex_t ready_mutex_NE;
-
-static DLL* process_queue;
-
-typedef struct Node {
-    Node* prev;
-    Node* next;
-    pcb_t* data;
-} Node;
-
 typedef struct DLL { 
-    Node* head;
-    Node* tail;
+    pcb_t* head;
+    pcb_t* tail;
     int size;
 } DLL;
 
+//These all need to be init right?
+static pthread_mutex_t ready_mutex;
+static pthread_cond_t cond_NE;
+static pthread_mutex_t ready_mutex_NE;
+static DLL* process_queue;
 
-static Node* create_node(pcb_t* data) {
-    Node* node = malloc(sizeof(Node));
-    node->prev = NULL;
-    node->next = NULL;
-    node->data = data;
-    return node;
+static void init_queue() {
+    process_queue = malloc(sizeof(DLL));
+    process_queue->head = NULL;
+    process_queue->tail = NULL;
+    process_queue->size = 0;
 }
 
 static pcb_t* pop_process() {
@@ -67,32 +56,27 @@ static pcb_t* pop_process() {
     if (process_queue->size == 0) {
         return NULL;
     } 
-    Node* node = process_queue->head;
-    pcb_t* process = node->data;
+    pcb_t* node = process_queue->head;
     if (process_queue->size == 1) {
         process_queue->head = NULL;
         process_queue->tail = NULL;
     } else {
         process_queue->head = node->next;
-        process_queue->head->prev = NULL;
     }
     process_queue->size--;
-    free(node);
     pthread_mutex_unlock(&ready_mutex);
-    return process;
+    return node;
 }
 
-//one entry edge case?
-static void add_node(pcb_t* data) {
-    Node* node = create_node(data);
+
+static void add_node(pcb_t* node) {
     pthread_mutex_lock(&ready_mutex);
     if (process_queue->size == 0) {
         process_queue->head = node;
         process_queue->tail = node;
     } else {
-        Node* prev = process_queue->tail;
+        pcb_t* prev = process_queue->tail;
         prev->next = node;
-        node->prev = prev;
         process_queue->tail = node;
     }
     process_queue->size++;
@@ -238,6 +222,11 @@ int main(int argc, char *argv[])
             "         -r : Round-Robin Scheduler\n\n");
         return -1;
     }
+
+    //init process queue
+    init_queue();
+
+
     cpu_count = strtoul(argv[1], NULL, 0);
 
     /* FIX ME - Add support for -l and -r parameters*/
@@ -250,6 +239,8 @@ int main(int argc, char *argv[])
     /* Start the simulator in the library */
     start_simulator(cpu_count);
 
+    //free process queue at the end of simulation
+    free(process_queue);
     return 0;
 }
 
