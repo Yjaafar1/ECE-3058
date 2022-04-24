@@ -33,6 +33,73 @@ static pcb_t **current;
 static pthread_mutex_t current_mutex;
 
 
+//These all need to be init right?
+static pthread_mutex_t ready_mutex;
+
+static pthread_cond_t cond_NE;
+static pthread_mutex_t ready_mutex_NE;
+
+static DLL* process_queue;
+
+typedef struct Node {
+    Node* prev;
+    Node* next;
+    pcb_t* data;
+} Node;
+
+typedef struct DLL { 
+    Node* head;
+    Node* tail;
+    int size;
+} DLL;
+
+
+static Node* create_node(pcb_t* data) {
+    Node* node = malloc(sizeof(Node));
+    node->prev = NULL;
+    node->next = NULL;
+    node->data = data;
+    return node;
+}
+
+static pcb_t* pop_process() {
+    pthread_mutex_lock(&ready_mutex);
+    if (process_queue->size == 0) {
+        return NULL;
+    } 
+    Node* node = process_queue->head;
+    pcb_t* process = node->data;
+    if (process_queue->size == 1) {
+        process_queue->head = NULL;
+        process_queue->tail = NULL;
+    } else {
+        process_queue->head = node->next;
+        process_queue->head->prev = NULL;
+    }
+    process_queue->size--;
+    free(node);
+    pthread_mutex_unlock(&ready_mutex);
+    return process;
+}
+
+//one entry edge case?
+static void add_node(pcb_t* data) {
+    Node* node = create_node(data);
+    pthread_mutex_lock(&ready_mutex);
+    if (process_queue->size == 0) {
+        process_queue->head = node;
+        process_queue->tail = node;
+    } else {
+        Node* prev = process_queue->tail;
+        prev->next = node;
+        node->prev = prev;
+        process_queue->tail = node;
+    }
+    process_queue->size++;
+    pthread_cond_broadcast(&cond_NE);
+    pthread_mutex_unlock(&ready_mutex);
+}
+
 /*
  * schedule() is your CPU scheduler.  It should perform the following tasks:
  *
@@ -51,7 +118,15 @@ static pthread_mutex_t current_mutex;
  */
 static void schedule(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pcb_t* process = pop_process();
+    if (process != NULL) {
+        process->state = PROCESS_RUNNING;
+    }
+    pthread_mutex_lock(&current_mutex);
+    current[cpu_id] = process;
+    context_switch(cpu_id, process, -1);
+    pthread_mutex_unlock(&current_mutex);
+
 }
 
 
@@ -64,19 +139,11 @@ static void schedule(unsigned int cpu_id)
  */
 extern void idle(unsigned int cpu_id)
 {
-    /* FIX ME */
-    schedule(0);
+    pthread_mutex_lock(&ready_mutex);
+    pthread_cond_wait(&cond_NE, &ready_mutex_NE);
+    pthread_mutex_unlock(&ready_mutex);
 
-    /*
-     * REMOVE THE LINE BELOW AFTER IMPLEMENTING IDLE()
-     *
-     * idle() must block when the ready queue is empty, or else the CPU threads
-     * will spin in a loop.  Until a ready queue is implemented, we'll put the
-     * thread to sleep to keep it from consuming 100% of the CPU time.  Once
-     * you implement a proper idle() function using a condition variable,
-     * remove the call to mt_safe_usleep() below.
-     */
-    mt_safe_usleep(1000000);
+    schedule(cpu_id);
 }
 
 
@@ -89,7 +156,12 @@ extern void idle(unsigned int cpu_id)
  */
 extern void preempt(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pthread_mutex_lock(&current_mutex);
+    pcb_t* current_process = current[cpu_id];
+    pthread_mutex_unlock(&current_mutex);
+    current_process->state = PROCESS_READY;
+    add_node(current_process);
+    schedule(cpu_id);
 }
 
 
@@ -102,7 +174,11 @@ extern void preempt(unsigned int cpu_id)
  */
 extern void yield(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pthread_mutex_lock(&current_mutex);
+    pcb_t* current_process = current[cpu_id];
+    current_process->state = PROCESS_WAITING;
+    pthread_mutex_unlock(&current_mutex);
+    schedule(cpu_id);
 }
 
 
@@ -113,7 +189,11 @@ extern void yield(unsigned int cpu_id)
  */
 extern void terminate(unsigned int cpu_id)
 {
-    /* FIX ME */
+    pthread_mutex_lock(&current_mutex);
+    pcb_t* current_process = current[cpu_id];
+    current_process->state = PROCESS_TERMINATED;
+    pthread_mutex_unlock(&current_mutex);
+    schedule(cpu_id);
 }
 
 
@@ -135,7 +215,8 @@ extern void terminate(unsigned int cpu_id)
  */
 extern void wake_up(pcb_t *process)
 {
-    /* FIX ME */
+    process->state = PROCESS_READY;
+    add_node(process);
 }
 
 
