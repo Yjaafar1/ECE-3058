@@ -49,6 +49,7 @@ static void init_queue() {
     process_queue->head = NULL;
     process_queue->tail = NULL;
     process_queue->size = 0;
+    printf("Queue");
 }
 
 static pcb_t* pop_process() {
