@@ -135,11 +135,11 @@ static void schedule(unsigned int cpu_id)
 extern void idle(unsigned int cpu_id)
 {
     printf("Idling: \n");
-    pthread_mutex_lock(&ready_mutex);
+    pthread_mutex_lock(&ready_mutex_NE);
     while(!condition) {
         pthread_cond_wait(&cond_NE, &ready_mutex_NE);
     }
-    pthread_mutex_unlock(&ready_mutex);
+    pthread_mutex_unlock(&ready_mutex_NE);
 
     schedule(cpu_id);
 }
@@ -218,7 +218,6 @@ extern void wake_up(pcb_t *process)
 {
     printf("Wake: \n");
     process->state = PROCESS_READY;
-    pthread_mutex_unlock(&ready_mutex);
     add_node(process);
 }
 
