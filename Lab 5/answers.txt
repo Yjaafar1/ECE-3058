@@ -1,13 +1,17 @@
 ECE 3058
 Thread Scheduling Lab
 
-Name:
-GT Username:
+Name: Youssef Jaafar
+GT Username: 903592407
 
 Problem 1B
 ----------
 
-/* Fix me */
+The total ex. time seems to be logarithmic, with smaller returns on efficiency when
+using 4 cores. This likely has to do with the fact that not all cores are being used
+at a time, with numerous idles interjected. With a modern CPU where far more processes demand
+CPU cores at once, the benefit of having more cores would be more noticable, but for this simulation
+there is a much smaller difference between 2 and 4 cores. 
 
 Problem 2B
 ----------

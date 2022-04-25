@@ -46,7 +46,6 @@ static pthread_mutex_t ready_mutex_NE;
 static DLL* process_queue;
 
 static void init_queue() {
-    printf("Init: \n");
     process_queue = (DLL*) malloc(sizeof(DLL));
     process_queue->head = NULL;
     process_queue->tail = NULL;
@@ -57,7 +56,6 @@ static void init_queue() {
 static pcb_t* pop_process() {
     pthread_mutex_lock(&ready_mutex);
     if (process_queue->size == 0) {
-        printf("Popped: NULL\n");
         pthread_mutex_unlock(&ready_mutex);
         return NULL;
     } 
@@ -71,13 +69,11 @@ static pcb_t* pop_process() {
     }
     process_queue->size--;
     pthread_mutex_unlock(&ready_mutex);
-    printf("Popped: %s \n", node->name);
     return node;
 }
 
 
 static void add_node(pcb_t* node) {
-    printf("Added: %s \n", node->name);
     pthread_mutex_lock(&ready_mutex);
     if (process_queue->size == 0) {
         process_queue->head = node;
@@ -91,7 +87,6 @@ static void add_node(pcb_t* node) {
     condition = 1;
     pthread_cond_signal(&cond_NE);
     pthread_mutex_unlock(&ready_mutex);
-    printf("Added Last: %s \n", node->name);
 }
 
 /*
@@ -112,7 +107,6 @@ static void add_node(pcb_t* node) {
  */
 static void schedule(unsigned int cpu_id)
 {
-    printf("Scheduled: %d \n", cpu_id);
     pcb_t* process = pop_process();
     if (process != NULL) {
         process->state = PROCESS_RUNNING;
@@ -134,7 +128,6 @@ static void schedule(unsigned int cpu_id)
  */
 extern void idle(unsigned int cpu_id)
 {
-    printf("Idling: \n");
     pthread_mutex_lock(&ready_mutex_NE);
     while(!condition) {
         pthread_cond_wait(&cond_NE, &ready_mutex_NE);
@@ -154,7 +147,6 @@ extern void idle(unsigned int cpu_id)
  */
 extern void preempt(unsigned int cpu_id)
 {
-    printf("Preempt: \n");
     pthread_mutex_lock(&current_mutex);
     pcb_t* current_process = current[cpu_id];
     pthread_mutex_unlock(&current_mutex);
@@ -173,7 +165,6 @@ extern void preempt(unsigned int cpu_id)
  */
 extern void yield(unsigned int cpu_id)
 {
-    printf("Yield: \n");
     pthread_mutex_lock(&current_mutex);
     pcb_t* current_process = current[cpu_id];
     current_process->state = PROCESS_WAITING;
@@ -189,7 +180,6 @@ extern void yield(unsigned int cpu_id)
  */
 extern void terminate(unsigned int cpu_id)
 {
-    printf("Terminate: \n");
     pthread_mutex_lock(&current_mutex);
     pcb_t* current_process = current[cpu_id];
     current_process->state = PROCESS_TERMINATED;
@@ -216,7 +206,6 @@ extern void terminate(unsigned int cpu_id)
  */
 extern void wake_up(pcb_t *process)
 {
-    printf("Wake: \n");
     process->state = PROCESS_READY;
     add_node(process);
 }
