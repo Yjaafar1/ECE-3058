@@ -49,7 +49,6 @@ static void init_queue() {
     process_queue->head = NULL;
     process_queue->tail = NULL;
     process_queue->size = 0;
-    printf("Queue");
 }
 
 static pcb_t* pop_process() {
@@ -71,6 +70,7 @@ static pcb_t* pop_process() {
 
 
 static void add_node(pcb_t* node) {
+    printf("%s \n", node->name);
     pthread_mutex_lock(&ready_mutex);
     if (process_queue->size == 0) {
         process_queue->head = node;
