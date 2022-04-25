@@ -57,6 +57,7 @@ static void init_queue() {
 static pcb_t* pop_process() {
     pthread_mutex_lock(&ready_mutex);
     if (process_queue->size == 0) {
+        pthread_mutex_unlock(&ready_mutex);
         return NULL;
     } 
     pcb_t* node = process_queue->head;
