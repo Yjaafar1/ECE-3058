@@ -89,6 +89,7 @@ static void add_node(pcb_t* node) {
     condition = 1;
     pthread_cond_signal(&cond_NE);
     pthread_mutex_unlock(&ready_mutex);
+    printf("Added Last: %s \n", node->name);
 }
 
 /*
