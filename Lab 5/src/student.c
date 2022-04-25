@@ -57,7 +57,7 @@ static void init_queue() {
 static pcb_t* pop_process() {
     pthread_mutex_lock(&ready_mutex);
     if (process_queue->size == 0) {
-        printf("Popped: NULL");
+        printf("Popped: NULL\n");
         pthread_mutex_unlock(&ready_mutex);
         return NULL;
     } 
@@ -218,6 +218,7 @@ extern void wake_up(pcb_t *process)
 {
     printf("Wake: \n");
     process->state = PROCESS_READY;
+    pthread_mutex_unlock(&ready_mutex);
     add_node(process);
 }
 
