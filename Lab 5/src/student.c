@@ -41,6 +41,7 @@ typedef struct DLL {
 //These all need to be init right?
 static pthread_mutex_t ready_mutex;
 static pthread_cond_t cond_NE;
+static int condition;
 static pthread_mutex_t ready_mutex_NE;
 static DLL* process_queue;
 
@@ -50,6 +51,7 @@ static void init_queue() {
     process_queue->head = NULL;
     process_queue->tail = NULL;
     process_queue->size = 0;
+    condition = 0;
 }
 
 static pcb_t* pop_process() {
@@ -61,6 +63,7 @@ static pcb_t* pop_process() {
     if (process_queue->size == 1) {
         process_queue->head = NULL;
         process_queue->tail = NULL;
+        condition = 0;
     } else {
         process_queue->head = node->next;
     }
@@ -83,6 +86,7 @@ static void add_node(pcb_t* node) {
         process_queue->tail = node;
     }
     process_queue->size++;
+    condition = 1;
     pthread_cond_signal(&cond_NE);
     pthread_mutex_unlock(&ready_mutex);
 }
@@ -129,7 +133,9 @@ extern void idle(unsigned int cpu_id)
 {
     printf("Idling: \n");
     pthread_mutex_lock(&ready_mutex);
-    pthread_cond_wait(&cond_NE, &ready_mutex_NE);
+    while(!condition) {
+        pthread_cond_wait(&cond_NE, &ready_mutex_NE);
+    }
     pthread_mutex_unlock(&ready_mutex);
 
     schedule(cpu_id);
