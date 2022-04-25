@@ -128,11 +128,9 @@ static void schedule(unsigned int cpu_id)
  */
 extern void idle(unsigned int cpu_id)
 {
-    pthread_mutex_lock(&ready_mutex_NE);
-    while(!condition) {
-        pthread_cond_wait(&cond_NE, &ready_mutex_NE);
-    }
-    pthread_mutex_unlock(&ready_mutex_NE);
+    pthread_mutex_lock(&ready_mutex);
+    pthread_cond_wait(&cond_NE, &ready_mutex);
+    pthread_mutex_unlock(&ready_mutex);
 
     schedule(cpu_id);
 }
