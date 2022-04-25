@@ -45,7 +45,7 @@ static pthread_mutex_t ready_mutex_NE;
 static DLL* process_queue;
 
 static void init_queue() {
-    process_queue = malloc(sizeof(DLL));
+    process_queue = (DLL*) malloc(sizeof(DLL));
     process_queue->head = NULL;
     process_queue->tail = NULL;
     process_queue->size = 0;
@@ -80,7 +80,7 @@ static void add_node(pcb_t* node) {
         process_queue->tail = node;
     }
     process_queue->size++;
-    pthread_cond_broadcast(&cond_NE);
+    pthread_cond_signal(&cond_NE);
     pthread_mutex_unlock(&ready_mutex);
 }
 
